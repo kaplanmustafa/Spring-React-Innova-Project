@@ -69,11 +69,13 @@ const UserSignupPage = () => {
           label="Password"
           onChange={onChange}
           error={passwordError}
+          type={"password"}
         />
         <Input
           name="passwordRepeat"
           label="Password Repeat"
           onChange={onChange}
+          type={"password"}
         />
         <div className="text-center">
           <button
