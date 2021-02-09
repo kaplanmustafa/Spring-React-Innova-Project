@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 
 const UserSignupPage = () => {
@@ -11,6 +12,20 @@ const UserSignupPage = () => {
   const onChange = (event) => {
     const { name, value } = event.target;
     setForm((previousForm) => ({ ...previousForm, [name]: value }));
+  };
+
+  const onClickSignup = (event) => {
+    event.preventDefault();
+
+    const { username, fullName, password } = form;
+
+    const body = {
+      username,
+      fullName,
+      password,
+    };
+
+    axios.post("/api/1.0/users", body);
   };
 
   return (
@@ -33,7 +48,7 @@ const UserSignupPage = () => {
           <label>Password Repeat</label>
           <input name="passwordRepeat" type="password" onChange={onChange} />
         </div>
-        <button>Sign Up</button>
+        <button onClick={onClickSignup}>Sign Up</button>
       </form>
     </div>
   );
