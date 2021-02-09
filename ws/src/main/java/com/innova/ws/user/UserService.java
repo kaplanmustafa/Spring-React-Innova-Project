@@ -10,5 +10,8 @@ public class UserService {
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-    
+
+    public void save(User user) {
+        userRepository.save(user);
+    }
 }
