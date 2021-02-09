@@ -1,5 +1,4 @@
-import * as ACTIONS from "./Constants";
-import { signup } from "../api/apiCalls";
+import { signup } from "../api/ApiCalls";
 
 export const signupHandler = (user) => {
   return async function (dispatch) {

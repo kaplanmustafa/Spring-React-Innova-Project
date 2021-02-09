@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { signup } from "../api/ApiCalls";
 import ButtonWithProgress from "../components/toolbox/ButtonWithProgress";
 import Input from "../components/toolbox/Input";
 import { useApiProgress } from "../shared/ApiProgress";
+import { useDispatch } from "react-redux";
+import { signupHandler } from "../redux/authActions";
 
 const UserSignupPage = () => {
   const [form, setForm] = useState({
@@ -13,6 +14,8 @@ const UserSignupPage = () => {
   });
 
   const [errors, setErrors] = useState({});
+
+  const dispatch = useDispatch();
 
   const onChange = (event) => {
     const { name, value } = event.target;
@@ -33,7 +36,7 @@ const UserSignupPage = () => {
     };
 
     try {
-      const response = await signup(body);
+      await dispatch(signupHandler(body));
     } catch (error) {
       if (error.response.data.validationErrors) {
         setErrors(error.response.data.validationErrors);
