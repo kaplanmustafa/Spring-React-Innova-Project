@@ -2,5 +2,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+      javax:
+        persistence:
+          validation:
+            mode: none
   datasource:
     generate-unique-name: false
