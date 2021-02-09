@@ -1,5 +1,6 @@
-import axios from "axios";
 import React, { useState } from "react";
+import { signup } from "../api/ApiCalls";
+import Input from "../components/Input";
 import { useApiProgress } from "../shared/ApiProgress";
 
 const UserSignupPage = () => {
@@ -15,7 +16,7 @@ const UserSignupPage = () => {
     setForm((previousForm) => ({ ...previousForm, [name]: value }));
   };
 
-  const onClickSignup = (event) => {
+  const onClickSignup = async (event) => {
     event.preventDefault();
 
     const { username, fullName, password } = form;
@@ -26,7 +27,9 @@ const UserSignupPage = () => {
       password,
     };
 
-    axios.post("/api/1.0/users", body);
+    try {
+      const response = await signup(body);
+    } catch (error) {}
   };
 
   const pendingApiCallSignup = useApiProgress("post", "/api/1.0/users");
@@ -35,32 +38,14 @@ const UserSignupPage = () => {
     <div className="container w-25">
       <form>
         <h1 className="text-center mt-4 mb-4">Sign Up</h1>
-        <div className="form-group">
-          <label>Username</label>
-          <input className="form-control" name="username" onChange={onChange} />
-        </div>
-        <div className="form-group">
-          <label>Full Name</label>
-          <input className="form-control" name="fullName" onChange={onChange} />
-        </div>
-        <div className="form-group">
-          <label>Password</label>
-          <input
-            className="form-control"
-            name="password"
-            type="password"
-            onChange={onChange}
-          />
-        </div>
-        <div className="form-group">
-          <label>Password Repeat</label>
-          <input
-            className="form-control"
-            name="passwordRepeat"
-            type="password"
-            onChange={onChange}
-          />
-        </div>
+        <Input name="username" label="Username" onChange={onChange} />
+        <Input name="fullName" label="Full Name" onChange={onChange} />
+        <Input name="password" label="Password" onChange={onChange} />
+        <Input
+          name="passwordRepeat"
+          label="Password Repeat"
+          onChange={onChange}
+        />
         <div className="text-center">
           <button
             className="btn btn-primary"
