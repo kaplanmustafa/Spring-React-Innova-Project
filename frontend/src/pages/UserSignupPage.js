@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { signup } from "../api/ApiCalls";
-import Input from "../components/Input";
+import ButtonWithProgress from "../components/toolbox/ButtonWithProgress";
+import Input from "../components/toolbox/Input";
 import { useApiProgress } from "../shared/ApiProgress";
 
 const UserSignupPage = () => {
@@ -48,6 +49,11 @@ const UserSignupPage = () => {
 
   const pendingApiCallSignup = useApiProgress("post", "/api/1.0/users");
 
+  let passwordRepeatError;
+  if (form.password !== form.passwordRepeat) {
+    passwordRepeatError = "Password mismatch";
+  }
+
   return (
     <div className="container w-25">
       <form>
@@ -75,19 +81,16 @@ const UserSignupPage = () => {
           name="passwordRepeat"
           label="Password Repeat"
           onChange={onChange}
+          error={passwordRepeatError}
           type={"password"}
         />
         <div className="text-center">
-          <button
-            className="btn btn-primary"
+          <ButtonWithProgress
+            disabled={pendingApiCallSignup || passwordRepeatError !== undefined}
             onClick={onClickSignup}
-            disabled={pendingApiCallSignup}
-          >
-            {pendingApiCallSignup && (
-              <span className="spinner-border spinner-border-sm"></span>
-            )}
-            Sign Up
-          </button>
+            pendingApiCall={pendingApiCallSignup}
+            text={"Sign Up"}
+          ></ButtonWithProgress>
         </div>
       </form>
     </div>
