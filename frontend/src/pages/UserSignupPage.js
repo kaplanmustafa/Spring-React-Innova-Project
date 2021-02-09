@@ -29,26 +29,40 @@ const UserSignupPage = () => {
   };
 
   return (
-    <div>
+    <div className="container w-25">
       <form>
-        <h1>Sign Up</h1>
-        <div>
+        <h1 className="text-center mt-4 mb-4">Sign Up</h1>
+        <div className="form-group">
           <label>Username</label>
-          <input name="username" onChange={onChange} />
+          <input className="form-control" name="username" onChange={onChange} />
         </div>
-        <div>
+        <div className="form-group">
           <label>Full Name</label>
-          <input name="fullName" onChange={onChange} />
+          <input className="form-control" name="fullName" onChange={onChange} />
         </div>
-        <div>
+        <div className="form-group">
           <label>Password</label>
-          <input name="password" type="password" onChange={onChange} />
+          <input
+            className="form-control"
+            name="password"
+            type="password"
+            onChange={onChange}
+          />
         </div>
-        <div>
+        <div className="form-group">
           <label>Password Repeat</label>
-          <input name="passwordRepeat" type="password" onChange={onChange} />
+          <input
+            className="form-control"
+            name="passwordRepeat"
+            type="password"
+            onChange={onChange}
+          />
         </div>
-        <button onClick={onClickSignup}>Sign Up</button>
+        <div className="text-center">
+          <button className="btn btn-primary" onClick={onClickSignup}>
+            Sign Up
+          </button>
+        </div>
       </form>
     </div>
   );
