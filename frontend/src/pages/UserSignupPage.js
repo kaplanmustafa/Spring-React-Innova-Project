@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { useApiProgress } from "../shared/ApiProgress";
 
 const UserSignupPage = () => {
   const [form, setForm] = useState({
@@ -27,6 +28,8 @@ const UserSignupPage = () => {
 
     axios.post("/api/1.0/users", body);
   };
+
+  const pendingApiCallSignup = useApiProgress("post", "/api/1.0/users");
 
   return (
     <div className="container w-25">
@@ -59,7 +62,14 @@ const UserSignupPage = () => {
           />
         </div>
         <div className="text-center">
-          <button className="btn btn-primary" onClick={onClickSignup}>
+          <button
+            className="btn btn-primary"
+            onClick={onClickSignup}
+            disabled={pendingApiCallSignup}
+          >
+            {pendingApiCallSignup && (
+              <span className="spinner-border spinner-border-sm"></span>
+            )}
             Sign Up
           </button>
         </div>
