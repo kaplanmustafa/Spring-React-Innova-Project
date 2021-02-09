@@ -22,7 +22,7 @@ public class User implements UserDetails{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotNull
+    @NotNull(message = "{ws.constraints.username.NotNull.message}")
     @Size(min = 4, max= 255)
     private String username;
 
@@ -31,7 +31,7 @@ public class User implements UserDetails{
     private String fullName;
 
     @NotNull
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$", message = "{ws.constraints.password.Pattern.message}")
     private String password;
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
