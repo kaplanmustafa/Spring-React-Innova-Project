@@ -8,6 +8,14 @@ export const loginSuccess = (authState) => {
   };
 };
 
+export const logoutSuccess = () => {
+  return async function (dispatch) {
+    dispatch({
+      type: ACTIONS.LOGOUT_SUCCESS,
+    });
+  };
+};
+
 export const loginHandler = (credentials) => {
   return async function (dispatch) {
     const response = await login(credentials);
