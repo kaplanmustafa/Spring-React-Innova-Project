@@ -8,6 +8,12 @@ const defaultState = {
 };
 
 const authReducer = (state = { ...defaultState }, action) => {
+  if (action.type === ACTIONS.LOGIN_SUCCESS) {
+    return {
+      ...action.payload,
+      isLoggedIn: true,
+    };
+  }
   return state;
 };
 
