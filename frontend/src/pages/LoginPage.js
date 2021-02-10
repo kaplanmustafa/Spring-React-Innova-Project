@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import ButtonWithProgress from "../components/toolbox/ButtonWithProgress";
 import Input from "../components/toolbox/Input";
 import { loginHandler } from "../redux/authActions";
+import { useApiProgress } from "../shared/ApiProgress";
 
 const LoginPage = () => {
   const [username, setUsername] = useState();
@@ -32,6 +33,7 @@ const LoginPage = () => {
     }
   };
 
+  const pendingApiCall = useApiProgress("post", "/api/1.0/auth");
   const buttonEnabled = username && password;
 
   return (
@@ -54,9 +56,10 @@ const LoginPage = () => {
         {error && <div className="alert alert-danger">{error}</div>}
         <div className="text-center">
           <ButtonWithProgress
-            disabled={!buttonEnabled}
+            disabled={!buttonEnabled || pendingApiCall}
             onClick={onClickLogin}
             text={"Login"}
+            pendingApiCall={pendingApiCall}
           ></ButtonWithProgress>
         </div>
       </form>
