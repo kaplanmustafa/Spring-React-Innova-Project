@@ -3,16 +3,24 @@ package com.innova.ws.auth;
 import com.innova.ws.user.User;
 import com.innova.ws.user.UserRepository;
 import com.innova.ws.user.vm.UserVM;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.hibernate.proxy.HibernateProxy;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 
 @Service
 public class AuthService {
 
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
+
+    String key = "my-app-secret";
 
     public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         super();
@@ -34,10 +42,28 @@ public class AuthService {
         }
 
         UserVM userVM = new UserVM(inDB);
-        String token = Jwts.builder().setSubject("" + inDB.getId()).signWith(SignatureAlgorithm.HS512, "my-app-secret").compact();
+        String token = Jwts.builder().setSubject("" + inDB.getId()).signWith(SignatureAlgorithm.HS512, key).compact();
         AuthResponse response = new AuthResponse();
         response.setUser(userVM);
         response.setToken(token);
         return response;
+    }
+
+    @Transactional
+    public UserDetails getUserDetails(String token) {
+        JwtParser parser = Jwts.parser().setSigningKey(key);
+
+        try {
+            parser.parse(token);
+            Claims claims = parser.parseClaimsJws(token).getBody();
+            long userId = new Long(claims.getSubject());
+            User user = userRepository.getOne(userId);
+            User actualUser = (User) ((HibernateProxy) user).getHibernateLazyInitializer().getImplementation();
+            return actualUser;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
