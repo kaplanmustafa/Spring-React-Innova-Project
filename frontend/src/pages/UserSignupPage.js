@@ -40,7 +40,7 @@ const UserSignupPage = (props) => {
 
     try {
       await dispatch(signupHandler(body));
-      push("/user");
+      push("/login");
     } catch (error) {
       if (error.response.data.validationErrors) {
         setErrors(error.response.data.validationErrors);
