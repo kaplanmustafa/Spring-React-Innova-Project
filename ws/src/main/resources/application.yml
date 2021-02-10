@@ -1,12 +1,11 @@
 spring:
+  datasource:
   jpa:
     properties:
       javax:
         persistence:
           validation:
             mode: none
-  datasource:
-    generate-unique-name: false
   profiles:
     active:
       - dev
@@ -14,6 +13,11 @@ spring:
   profiles: prod
 ---
   profiles: dev
-  jpa:
-    hibernate:
-      ddl-auto: update
+  spring:
+    datasource:
+      generate-unique-name: false
+      url: jdbc:h2:./devdb
+      username: sa
+    jpa:
+      hibernate:
+        ddl-auto: update
