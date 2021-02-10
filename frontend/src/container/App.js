@@ -5,6 +5,7 @@ import UserSignupPage from "../pages/UserSignupPage";
 import UserPage from "../pages/UserPage";
 import ErrorPage from "../pages/ErrorPage";
 import { useSelector } from "react-redux";
+import Navbar from "../components/shared/Navbar";
 
 function App() {
   const { isLoggedIn, role } = useSelector((store) => ({
@@ -14,6 +15,7 @@ function App() {
 
   return (
     <HashRouter>
+      {isLoggedIn && <Navbar />}
       <Switch>
         {!isLoggedIn && <Route path="/signup" component={UserSignupPage} />}
         {!isLoggedIn && <Route path="/login" component={LoginPage} />}

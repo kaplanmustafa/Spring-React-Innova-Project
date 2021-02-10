@@ -1,7 +1,7 @@
 import React from "react";
 import errorImage from "../assets/error.png";
 
-const componentName = () => {
+const ErrorPage = () => {
   return (
     <div className="container text-center">
       <img src={errorImage} />
@@ -9,4 +9,4 @@ const componentName = () => {
   );
 };
 
-export default componentName;
+export default ErrorPage;
