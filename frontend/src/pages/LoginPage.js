@@ -1,15 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import ButtonWithProgress from "../components/toolbox/ButtonWithProgress";
 import Input from "../components/toolbox/Input";
+import { loginHandler } from "../redux/authActions";
 
 const LoginPage = () => {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
+  const [error, setError] = useState();
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setError(undefined);
+  }, [username, password]);
+
+  const onClickLogin = async (event) => {
+    event.preventDefault();
+
+    const creds = {
+      username,
+      password,
+    };
+
+    setError(undefined);
+
+    try {
+      await dispatch(loginHandler(creds));
+    } catch (apiError) {
+      setError("Incorrect username or password");
+    }
+  };
+
+  const buttonEnabled = username && password;
 
   return (
     <div className="container w-25 mt-5">
       <form>
-        <h1 className="text-center mb-4">Login</h1>
+        <h1 className="text-center mt-5 mb-4">{"Login"}</h1>
         <Input
           label={"Username"}
           onChange={(event) => {
@@ -23,8 +51,13 @@ const LoginPage = () => {
           }}
           type="password"
         />
+        {error && <div className="alert alert-danger">{error}</div>}
         <div className="text-center">
-          <ButtonWithProgress text={"Login"}></ButtonWithProgress>
+          <ButtonWithProgress
+            disabled={!buttonEnabled}
+            onClick={onClickLogin}
+            text={"Login"}
+          ></ButtonWithProgress>
         </div>
       </form>
     </div>
