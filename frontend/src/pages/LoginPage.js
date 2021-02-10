@@ -5,7 +5,7 @@ import Input from "../components/toolbox/Input";
 import { loginHandler } from "../redux/authActions";
 import { useApiProgress } from "../shared/ApiProgress";
 
-const LoginPage = () => {
+const LoginPage = (props) => {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [error, setError] = useState();
@@ -19,6 +19,9 @@ const LoginPage = () => {
   const onClickLogin = async (event) => {
     event.preventDefault();
 
+    const { history } = props;
+    const { push } = history;
+
     const creds = {
       username,
       password,
@@ -28,6 +31,7 @@ const LoginPage = () => {
 
     try {
       await dispatch(loginHandler(creds));
+      push("/user");
     } catch (apiError) {
       setError("Incorrect username or password");
     }

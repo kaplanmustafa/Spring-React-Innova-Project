@@ -5,7 +5,7 @@ import { useApiProgress } from "../shared/ApiProgress";
 import { useDispatch } from "react-redux";
 import { signupHandler } from "../redux/authActions";
 
-const UserSignupPage = () => {
+const UserSignupPage = (props) => {
   const [form, setForm] = useState({
     username: null,
     fullName: null,
@@ -27,6 +27,9 @@ const UserSignupPage = () => {
   const onClickSignup = async (event) => {
     event.preventDefault();
 
+    const { history } = props;
+    const { push } = history;
+
     const { username, fullName, password } = form;
 
     const body = {
@@ -37,6 +40,7 @@ const UserSignupPage = () => {
 
     try {
       await dispatch(signupHandler(body));
+      push("/user");
     } catch (error) {
       if (error.response.data.validationErrors) {
         setErrors(error.response.data.validationErrors);
@@ -51,6 +55,9 @@ const UserSignupPage = () => {
   } = errors;
 
   const pendingApiCallSignup = useApiProgress("post", "/api/1.0/users");
+  const pendingApiCallLogin = useApiProgress("post", "/api/1.0/auth");
+
+  const pendingApiCall = pendingApiCallSignup || pendingApiCallLogin;
 
   let passwordRepeatError;
   if (form.password !== form.passwordRepeat) {
@@ -89,9 +96,9 @@ const UserSignupPage = () => {
         />
         <div className="text-center">
           <ButtonWithProgress
-            disabled={pendingApiCallSignup || passwordRepeatError !== undefined}
+            disabled={pendingApiCall || passwordRepeatError !== undefined}
             onClick={onClickSignup}
-            pendingApiCall={pendingApiCallSignup}
+            pendingApiCall={pendingApiCall}
             text={"Sign Up"}
           ></ButtonWithProgress>
         </div>
