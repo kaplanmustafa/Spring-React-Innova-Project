@@ -1,6 +1,6 @@
 package com.innova.ws.auth;
 
-import com.innova.ws.user.vm.UserVM;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AuthController {
 
+    @Autowired
+    AuthService authService;
+
     @PostMapping("/api/1.0/auth")
-    UserVM handleAuthentication(@RequestBody Credentials credentials) {
-        // to do
-        return null;
+    AuthResponse handleAuthentication(@RequestBody Credentials credentials) {
+        return authService.authenticate(credentials);
     }
 }
