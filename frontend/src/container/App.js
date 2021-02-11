@@ -15,7 +15,7 @@ function App() {
 
   return (
     <HashRouter>
-      {isLoggedIn && <Navbar />}
+      <Navbar />
       <Switch>
         {!isLoggedIn && <Route path="/signup" component={UserSignupPage} />}
         {!isLoggedIn && <Route path="/login" component={LoginPage} />}
