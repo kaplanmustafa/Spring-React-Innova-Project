@@ -4,8 +4,9 @@ import Input from "../components/toolbox/Input";
 import { useApiProgress } from "../shared/ApiProgress";
 import { useDispatch } from "react-redux";
 import { signupHandler } from "../redux/authActions";
+import { Link } from "react-router-dom";
 
-const UserSignupPage = (props) => {
+const UserSignupPage = () => {
   const [form, setForm] = useState({
     username: null,
     fullName: null,
@@ -14,21 +15,20 @@ const UserSignupPage = (props) => {
   });
 
   const [errors, setErrors] = useState({});
+  const [isSignupSuccess, setIsSignupSuccess] = useState(false);
 
   const dispatch = useDispatch();
 
   const onChange = (event) => {
     const { name, value } = event.target;
 
+    setIsSignupSuccess(false);
     setErrors((previousErrors) => ({ ...previousErrors, [name]: undefined }));
     setForm((previousForm) => ({ ...previousForm, [name]: value }));
   };
 
   const onClickSignup = async (event) => {
     event.preventDefault();
-
-    const { history } = props;
-    const { push } = history;
 
     const { username, fullName, password } = form;
 
@@ -40,7 +40,7 @@ const UserSignupPage = (props) => {
 
     try {
       await dispatch(signupHandler(body));
-      push("/login");
+      setIsSignupSuccess(true);
     } catch (error) {
       if (error.response.data.validationErrors) {
         setErrors(error.response.data.validationErrors);
@@ -94,6 +94,16 @@ const UserSignupPage = (props) => {
           error={passwordRepeatError}
           type={"password"}
         />
+        {isSignupSuccess && (
+          <div className="container text-center mt-2">
+            <div className="alert alert-info">
+              <Link to={"/login"}>
+                <button className="btn btn-outline-primary">Go to Login</button>
+              </Link>
+              <div className="mt-2">Registration Successful</div>
+            </div>
+          </div>
+        )}
         <div className="text-center">
           <ButtonWithProgress
             disabled={pendingApiCall || passwordRepeatError !== undefined}
