@@ -17,6 +17,9 @@ public class Note {
     @Column(length = 1000)
     private String content;
 
+    @Column(length = 255)
+    private String title;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
 
