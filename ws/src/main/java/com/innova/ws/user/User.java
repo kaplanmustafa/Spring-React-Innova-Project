@@ -1,18 +1,17 @@
 package com.innova.ws.user;
 
+import com.innova.ws.note.Note;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Collection;
+import java.util.List;
 
 @Data // Auto Getter and Setter
 @Entity
@@ -34,6 +33,9 @@ public class User implements UserDetails{
     @NotNull
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$", message = "{ws.constraints.password.Pattern.message}")
     private String password;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Note> notes;
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return AuthorityUtils.createAuthorityList("Role_user");
