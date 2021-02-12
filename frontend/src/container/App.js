@@ -19,7 +19,7 @@ function App() {
     <HashRouter>
       <Navbar />
       <Switch>
-        <Route exact path="/" component={isLoggedIn ? UserPage : LoginPage} />
+        {isLoggedIn && <Route path="/mynotes/:username" component={UserPage} />}
         {!isLoggedIn && <Route path="/signup" component={UserSignupPage} />}
         {!isLoggedIn && <Route path="/login" component={LoginPage} />}
         {isLoggedIn && <Route path="/addNote" component={AddNotePage} />}
