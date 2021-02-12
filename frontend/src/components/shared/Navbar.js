@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logoutSuccess } from "../../redux/authActions";
 import { Link, useHistory } from "react-router-dom";
 
-const Navbar = (props) => {
+const Navbar = () => {
   const { isLoggedIn, fullName } = useSelector((store) => {
     return {
       isLoggedIn: store.isLoggedIn,
@@ -22,11 +22,11 @@ const Navbar = (props) => {
 
   return (
     <div className="mb-3 shadow-sm">
-      <nav className="navbar navbar-expand-lg container navbar-light">
+      <nav className="navbar navbar-expand-lg navbar-light container">
         <div className="navbar-brand">
           {isLoggedIn ? "My Notes | " + fullName : "My Notes"}
         </div>
-        <div className="collapse navbar-collapse">
+        <div className="container">
           {isLoggedIn && (
             <button
               className="btn btn-outline-danger ml-auto"
