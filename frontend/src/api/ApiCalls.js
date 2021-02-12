@@ -16,3 +16,7 @@ export const setAuthorizationHeader = ({ token, isLoggedIn }) => {
     delete axios.defaults.headers["Authorization"];
   }
 };
+
+export const saveNote = (note) => {
+  return axios.post("/api/1.0/notes", note);
+};
