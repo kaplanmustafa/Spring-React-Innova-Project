@@ -6,6 +6,7 @@ import UserPage from "../pages/UserPage";
 import ErrorPage from "../pages/ErrorPage";
 import { useSelector } from "react-redux";
 import Navbar from "../components/shared/Navbar";
+import AddNotePage from "../pages/AddNotePage";
 
 function App() {
   const { isLoggedIn, role } = useSelector((store) => ({
@@ -20,6 +21,7 @@ function App() {
         <Route exact path="/" component={isLoggedIn ? UserPage : LoginPage} />
         {!isLoggedIn && <Route path="/signup" component={UserSignupPage} />}
         {!isLoggedIn && <Route path="/login" component={LoginPage} />}
+        {isLoggedIn && <Route path="/addNote" component={AddNotePage} />}
         <Route path="/error" component={ErrorPage} />
         <Redirect to="/error" />
       </Switch>

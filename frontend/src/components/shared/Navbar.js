@@ -28,12 +28,17 @@ const Navbar = () => {
         </div>
         <div className="container">
           {isLoggedIn && (
-            <button
-              className="btn btn-outline-danger ml-auto"
-              onClick={onLogoutSuccess}
-            >
-              Logout
-            </button>
+            <div className="ml-auto">
+              <Link to={"/addNote"}>
+                <button className="btn btn-outline-primary">Add Note</button>
+              </Link>
+              <button
+                className="btn btn-outline-danger ml-1"
+                onClick={onLogoutSuccess}
+              >
+                Logout
+              </button>
+            </div>
           )}
           {!isLoggedIn && (
             <div className="ml-auto">
