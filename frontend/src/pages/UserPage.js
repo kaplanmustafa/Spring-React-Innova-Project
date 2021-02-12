@@ -1,7 +1,12 @@
 import React from "react";
+import NoteCard from "../components/NoteCard";
 
 const UserPage = () => {
-  return <div>USER PAGE</div>;
+  return (
+    <div className="container">
+      <NoteCard />
+    </div>
+  );
 };
 
 export default UserPage;
