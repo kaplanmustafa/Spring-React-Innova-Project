@@ -10,9 +10,8 @@ import AddNotePage from "../pages/AddNotePage";
 import NoteDetailPage from "../pages/NoteDetailPage";
 
 function App() {
-  const { isLoggedIn, role } = useSelector((store) => ({
+  const { isLoggedIn } = useSelector((store) => ({
     isLoggedIn: store.isLoggedIn,
-    role: store.role,
   }));
 
   return (
