@@ -38,3 +38,7 @@ export const getNoteById = (id) => {
 export const updateNote = (username, noteId, body) => {
   return axios.put(`/api/1.0/notes/${username}/${noteId}`, body);
 };
+
+export const deleteNote = (id) => {
+  return axios.delete(`/api/1.0/notes/${id}`);
+};

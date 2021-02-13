@@ -53,4 +53,11 @@ public class NoteController {
         Note note = noteService.updateNote(noteId, updatedNote);
         return new NoteVM(note);
     }
+
+    @DeleteMapping("/notes/{id:[0-9]+}")
+    @PreAuthorize("@noteSecurity.isAllowedToDelete(#id, principal)")
+    GenericResponse deleteHoax(@PathVariable long id) {
+        noteService.delete(id);
+        return new GenericResponse("Note removed");
+    }
 }

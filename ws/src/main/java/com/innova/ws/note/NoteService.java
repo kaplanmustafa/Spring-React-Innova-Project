@@ -62,6 +62,10 @@ public class NoteService {
         return inDB.orElse(null);
     }
 
+    public void delete(long id) {
+        noteRepository.deleteById(id);
+    }
+
     Specification<Note> idLessThan(long id) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.lessThan(root.get("id"), id);
     }

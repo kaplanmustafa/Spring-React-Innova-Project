@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router";
-import { getNoteById } from "../api/ApiCalls";
+import { deleteNote, getNoteById } from "../api/ApiCalls";
 import { updateNote } from "../api/ApiCalls";
 import ButtonWithProgress from "../components/toolbox/ButtonWithProgress";
 import { useApiProgress } from "../shared/ApiProgress";
+import Modal from "../components/toolbox/Modal";
 
-const NoteDetailPage = () => {
+const NoteDetailPage = (props) => {
   const [inEditMode, setInEditMode] = useState(false);
   const [note, setNote] = useState({});
   const [updatedContent, setUpdatedContent] = useState("");
   const [updatedTitle, setUpdatedTitle] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
 
   const { content, title } = note;
+
+  const { history } = props;
+  const { push } = history;
 
   const { username } = useSelector((store) => ({
     username: store.username,
@@ -52,7 +57,23 @@ const NoteDetailPage = () => {
     setUpdatedContent(content);
   };
 
-  const pendingApiCall = useApiProgress(
+  const pendingDeleteNoteApiCall = useApiProgress(
+    "delete",
+    `/api/1.0/notes/${noteId}`,
+    true
+  );
+
+  const onClickDelete = async () => {
+    await deleteNote(noteId);
+    setModalVisible(false);
+    history.push(`/mynotes/${username}`);
+  };
+
+  const onClickCancelModal = () => {
+    setModalVisible(false);
+  };
+
+  const pendingSaveNoteApiCall = useApiProgress(
     "put",
     `/api/1.0/notes/${username}/${noteId}`
   );
@@ -98,15 +119,15 @@ const NoteDetailPage = () => {
                     className="btn btn-outline-success"
                     onClick={onClickSaveNote}
                     text="Save"
-                    disabled={pendingApiCall || !buttonEnabled}
-                    pendingApiCall={pendingApiCall}
+                    disabled={pendingSaveNoteApiCall || !buttonEnabled}
+                    pendingApiCall={pendingSaveNoteApiCall}
                   />
                 </div>
                 <div className="row mt-3">
                   <button
                     className="btn btn-outline-danger"
                     onClick={onClickCancel}
-                    disabled={pendingApiCall}
+                    disabled={pendingSaveNoteApiCall}
                   >
                     Cancel
                   </button>
@@ -124,13 +145,37 @@ const NoteDetailPage = () => {
                   </button>
                 </div>
                 <div className="row mt-3">
-                  <button className="btn btn-outline-danger">Delete</button>
+                  <button
+                    className="btn btn-outline-danger"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      setModalVisible(true);
+                    }}
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             )}
           </div>
         </form>
       </div>
+      <Modal
+        title={"Delete Note"}
+        visible={modalVisible}
+        onClickCancel={onClickCancelModal}
+        onClickOk={onClickDelete}
+        okButton={"Delete Note"}
+        message={
+          <div>
+            <div>
+              <strong>Are you sure to delete note?</strong>
+            </div>
+            <span>{title}</span>
+          </div>
+        }
+        pendingApiCall={pendingDeleteNoteApiCall}
+      />
     </div>
   );
 };
