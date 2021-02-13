@@ -5,7 +5,7 @@ const NoteFeed = (props) => {
   const { notes } = props;
 
   return (
-    <div className="row">
+    <div className="row mb-5">
       {notes.map((note) => {
         return (
           <div className="col-4 mt-3" key={note.id}>

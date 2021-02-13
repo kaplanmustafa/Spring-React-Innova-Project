@@ -34,7 +34,7 @@ const Navbar = () => {
           {isLoggedIn && (
             <div className="ml-auto">
               <Link to={"/addNote"}>
-                <button className="btn btn-outline-primary">Add Note</button>
+                <button className="btn btn-outline-primary">New Note</button>
               </Link>
               <button
                 className="btn btn-outline-danger ml-1"

@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { getNotes, getOldNotes } from "../api/ApiCalls";
 import NoteFeed from "../components/NoteFeed";
+import ButtonWithProgress from "../components/toolbox/ButtonWithProgress";
+import { useApiProgress } from "../shared/ApiProgress";
 
 const UserPage = () => {
   const [page, setPage] = useState({
@@ -13,10 +16,7 @@ const UserPage = () => {
   }));
 
   let lastId = 0;
-  let firstId = 0;
   if (page.content.length > 0) {
-    firstId = page.content[0].id;
-
     const lastIndex = page.content.length - 1;
     lastId = page.content[lastIndex].id;
   }
@@ -42,17 +42,36 @@ const UserPage = () => {
     } catch (error) {}
   };
 
-  const { content, last } = page;
+  const { content, last, empty } = page;
+
+  const loadOldNotesProgress = useApiProgress(
+    "get",
+    `/api/1.0/users/${username}/notes/${lastId}`
+  );
 
   return (
-    <div className="container">
+    <div className="container mt-5">
       <NoteFeed notes={content} />
 
       {!last && (
         <div className="container text-center mt-5">
-          <button className="btn btn-primary w-25" onClick={loadOldNotes}>
-            Load More
-          </button>
+          <ButtonWithProgress
+            disabled={loadOldNotesProgress}
+            onClick={loadOldNotes}
+            text={"Load More"}
+            pendingApiCall={loadOldNotesProgress}
+            className={"btn btn-primary w-25"}
+          ></ButtonWithProgress>
+        </div>
+      )}
+      {empty && (
+        <div className="container mt-5">
+          <div className="alert alert-danger text-center">
+            <h2>No Notes Yet!</h2>
+            <Link to={"/addNote"}>
+              <button className="btn btn-primary mt-4">New Note</button>
+            </Link>
+          </div>
         </div>
       )}
     </div>
