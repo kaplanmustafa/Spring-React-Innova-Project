@@ -30,3 +30,11 @@ export const getNotes = (username, page = 0, size = 3) => {
 export const getOldNotes = (id, username, size = 3) => {
   return axios.get(`/api/1.0/users/${username}/notes/${id}?size=${3}`);
 };
+
+export const getNoteById = (id) => {
+  return axios.get(`/api/1.0/users/notes/${id}`);
+};
+
+export const updateNote = (username, noteId, body) => {
+  return axios.put(`/api/1.0/notes/${username}/${noteId}`, body);
+};
