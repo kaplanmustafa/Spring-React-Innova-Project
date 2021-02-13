@@ -31,7 +31,7 @@ const LoginPage = (props) => {
 
     try {
       await dispatch(loginHandler(creds));
-      push("/");
+      push(`/mynotes/${username}`);
     } catch (apiError) {
       setError("Incorrect username or password");
     }
