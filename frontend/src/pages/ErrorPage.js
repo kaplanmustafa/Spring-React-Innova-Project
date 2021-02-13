@@ -4,7 +4,7 @@ import errorImage from "../assets/error.png";
 const ErrorPage = () => {
   return (
     <div className="container text-center">
-      <img src={errorImage} />
+      <img src={errorImage} alt={"404-error"} />
     </div>
   );
 };
