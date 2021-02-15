@@ -1,5 +1,6 @@
 package com.innova.ws.comment;
 
+import com.innova.ws.error.ForbiddenException;
 import com.innova.ws.error.NotFoundException;
 import com.innova.ws.note.Note;
 import com.innova.ws.note.NoteService;
@@ -23,6 +24,10 @@ public class CommentService {
         Note note = noteService.getNoteByNoteId(noteId);
         if(note == null) {
             throw new NotFoundException();
+        }
+
+        if(note.getUser().getId() != user.getId()) {
+            throw new ForbiddenException();
         }
 
         Comment newComment = new Comment();
