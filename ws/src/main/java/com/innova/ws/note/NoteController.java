@@ -56,7 +56,7 @@ public class NoteController {
 
     @DeleteMapping("/notes/{id:[0-9]+}")
     @PreAuthorize("@noteSecurity.isAllowedToDelete(#id, principal)")
-    GenericResponse deleteHoax(@PathVariable long id) {
+    GenericResponse deleteNote(@PathVariable long id) {
         noteService.delete(id);
         return new GenericResponse("Note removed");
     }

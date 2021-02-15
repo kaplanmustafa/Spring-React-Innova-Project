@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,5 +30,12 @@ public class CommentController {
     @GetMapping("/users/comments/{noteId}")
     Page<CommentVM> getCommentsOfNote(@PathVariable long noteId, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable page) {
         return commentService.getCommentsOfNote(noteId, page).map(CommentVM::new);
+    }
+
+    @GetMapping({ "/users/{noteId}/comments/{id:[0-9]+}"})
+    ResponseEntity<?> getCommentsRelative(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable page, @PathVariable long id,
+                                       @PathVariable long noteId) {
+
+        return ResponseEntity.ok(commentService.getOldComments(id, noteId, page).map(CommentVM::new));
     }
 }
