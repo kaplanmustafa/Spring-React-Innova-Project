@@ -4,12 +4,15 @@ import { Link } from "react-router-dom";
 import { getNotes, getOldNotes } from "../api/ApiCalls";
 import NoteFeed from "../components/NoteFeed";
 import ButtonWithProgress from "../components/toolbox/ButtonWithProgress";
+import Spinner from "../components/toolbox/Spinner";
 import { useApiProgress } from "../shared/ApiProgress";
 
 const UserPage = () => {
   const [page, setPage] = useState({
     content: [],
   });
+
+  const [notFound, setNotFound] = useState(false);
 
   const { username } = useSelector((store) => ({
     username: store.username,
@@ -29,7 +32,9 @@ const UserPage = () => {
     try {
       const response = await getNotes(username);
       setPage(response.data);
-    } catch (error) {}
+    } catch (error) {
+      setNotFound(true);
+    }
   };
 
   const loadOldNotes = async () => {
@@ -48,6 +53,20 @@ const UserPage = () => {
     "get",
     `/api/1.0/users/${username}/notes/${lastId}`
   );
+
+  if (notFound) {
+    return (
+      <div className="container mt-5">
+        <div className="alert alert-danger text-center p-5">
+          <h1>Failed to Load Notes!</h1>
+        </div>
+      </div>
+    );
+  }
+
+  if (last === undefined) {
+    return <Spinner />;
+  }
 
   return (
     <div className="container mt-5">
