@@ -49,7 +49,13 @@ const Comments = () => {
   return (
     <div className="col-10 mb-5">
       {content.map((item) => {
-        return <CommentView key={item.id} comment={item.comment} />;
+        return (
+          <CommentView
+            commentId={item.id}
+            comment={item.comment}
+            key={item.id}
+          />
+        );
       })}
       {!last && (
         <div className="container text-center mt-5">

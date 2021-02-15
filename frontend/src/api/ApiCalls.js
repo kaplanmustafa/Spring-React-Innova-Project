@@ -56,3 +56,7 @@ export const getComments = (noteId, page = 0, size = 3) => {
 export const getOldComments = (id, noteId, size = 3) => {
   return axios.get(`/api/1.0/users/${noteId}/comments/${id}?size=${size}`);
 };
+
+export const deleteComment = (id) => {
+  return axios.delete(`/api/1.0/comments/${id}`);
+};
