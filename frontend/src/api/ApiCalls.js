@@ -28,7 +28,7 @@ export const getNotes = (username, page = 0, size = 6) => {
 };
 
 export const getOldNotes = (id, username, size = 6) => {
-  return axios.get(`/api/1.0/users/${username}/notes/${id}?size=${3}`);
+  return axios.get(`/api/1.0/users/${username}/notes/${id}?size=${size}`);
 };
 
 export const getNoteById = (id) => {
@@ -51,4 +51,8 @@ export const getComments = (noteId, page = 0, size = 3) => {
   return axios.get(
     `/api/1.0/users/comments/${noteId}?page=${page}&size=${size}`
   );
+};
+
+export const getOldComments = (id, noteId, size = 3) => {
+  return axios.get(`/api/1.0/users/${noteId}/comments/${id}?size=${size}`);
 };
