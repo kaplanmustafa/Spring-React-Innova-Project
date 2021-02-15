@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { getComments, getOldComments } from "../api/ApiCalls";
 import { useApiProgress } from "../shared/ApiProgress";
@@ -9,6 +10,11 @@ const Comments = () => {
   const [page, setPage] = useState({
     content: [],
   });
+  const [commentCount, setCommentCount] = useState();
+
+  const { username } = useSelector((store) => ({
+    username: store.username,
+  }));
 
   const { noteId } = useParams();
 
@@ -19,13 +25,29 @@ const Comments = () => {
   }
 
   useEffect(() => {
-    loadComments(noteId);
-  }, [noteId]);
+    loadComments();
+  }, [noteId, commentCount]);
 
-  const loadComments = async (noteId) => {
+  useEffect(() => {
+    let looper = setInterval(loadCommentsForDifference, 5000);
+
+    return function cleanup() {
+      clearInterval(looper);
+    };
+  }, [username]);
+
+  const loadComments = async () => {
     try {
       const response = await getComments(noteId);
       setPage(response.data);
+      setCommentCount(response.data.totalElements);
+    } catch (error) {}
+  };
+
+  const loadCommentsForDifference = async () => {
+    try {
+      const response = await getComments(noteId);
+      setCommentCount(response.data.totalElements);
     } catch (error) {}
   };
 
