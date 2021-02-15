@@ -3,6 +3,8 @@ package com.innova.ws.comment.vm;
 import com.innova.ws.comment.Comment;
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class CommentVM {
 
@@ -10,11 +12,11 @@ public class CommentVM {
 
     private String comment;
 
-    private long timestamp;
+    private Date timestamp;
 
     public CommentVM(Comment comment) {
         this.setId(comment.getId());
         this.setComment(comment.getComment());
-        this.setTimestamp(comment.getTimestamp().getTime());
+        this.setTimestamp(comment.getTimestamp());
     }
 }

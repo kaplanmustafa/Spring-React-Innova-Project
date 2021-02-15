@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { deleteComment } from "../api/ApiCalls";
 import { useApiProgress } from "../shared/ApiProgress";
+import DateConverter from "./toolbox/DateConverter";
 import Modal from "./toolbox/Modal";
 
 const CommentView = (props) => {
-  const { comment, commentId } = props;
+  const { comment, commentId, timestamp } = props;
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -24,8 +25,9 @@ const CommentView = (props) => {
   };
 
   return (
-    <div className="card container mt-2">
+    <div className="card container mt-4">
       <div className="row">
+        <DateConverter timestamp={timestamp} horizontal={true} />
         <textarea
           className="form-control bg-white"
           value={comment}
@@ -33,7 +35,7 @@ const CommentView = (props) => {
           rows={5}
         ></textarea>
       </div>
-      <div className=" container text-right">
+      <div className="container text-right">
         <button
           className="btn btn-outline-danger mt-1 mb-1"
           onClick={(event) => {

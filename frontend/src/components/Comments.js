@@ -75,6 +75,7 @@ const Comments = () => {
           <CommentView
             commentId={item.id}
             comment={item.comment}
+            timestamp={item.timestamp}
             key={item.id}
           />
         );
