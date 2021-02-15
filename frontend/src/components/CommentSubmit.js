@@ -36,7 +36,7 @@ const CommentSubmit = () => {
   let textAreaClass = "form-control";
 
   return (
-    <div className="container mt-3 mb-5">
+    <div className="container mt-3 mb-2">
       <div className="card p-1 flex-row col-10">
         <div className="flex-fill">
           <textarea

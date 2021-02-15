@@ -7,6 +7,7 @@ import ButtonWithProgress from "../components/toolbox/ButtonWithProgress";
 import { useApiProgress } from "../shared/ApiProgress";
 import Modal from "../components/toolbox/Modal";
 import CommentSubmit from "../components/CommentSubmit";
+import Comments from "../components/Comments";
 
 const NoteDetailPage = (props) => {
   const [inEditMode, setInEditMode] = useState(false);
@@ -162,6 +163,7 @@ const NoteDetailPage = (props) => {
       </div>
 
       <CommentSubmit />
+      <Comments />
       <Modal
         title={"Delete Note"}
         visible={modalVisible}

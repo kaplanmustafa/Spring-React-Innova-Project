@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface CommentRepository extends JpaRepository<Comment, Long>, JpaSpecificationExecutor<Note> {
-    Page<Comment> findByNote(Note inDB, Pageable page);
+    Page<Comment> findByNote(Note note, Pageable page);
 }

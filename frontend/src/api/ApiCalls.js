@@ -46,3 +46,9 @@ export const deleteNote = (id) => {
 export const saveComment = (comment, noteId) => {
   return axios.post(`/api/1.0/comments/${noteId}`, comment);
 };
+
+export const getComments = (noteId, page = 0, size = 3) => {
+  return axios.get(
+    `/api/1.0/users/comments/${noteId}?page=${page}&size=${size}`
+  );
+};
