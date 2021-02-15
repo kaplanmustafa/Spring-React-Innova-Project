@@ -15,8 +15,8 @@ import javax.validation.Valid;
 public class CommentController {
 
     @PostMapping("/notes")
-    GenericResponse saveNote(@Valid @RequestBody Comment comment, @CurrentUser User user) {
+    GenericResponse saveComment(@Valid @RequestBody Comment comment, @CurrentUser User user) {
         // to do
-        return new GenericResponse("Note saved");
+        return new GenericResponse("Comment saved");
     }
 }
