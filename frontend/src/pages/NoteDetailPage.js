@@ -6,6 +6,7 @@ import { updateNote } from "../api/ApiCalls";
 import ButtonWithProgress from "../components/toolbox/ButtonWithProgress";
 import { useApiProgress } from "../shared/ApiProgress";
 import Modal from "../components/toolbox/Modal";
+import CommentSubmit from "../components/CommentSubmit";
 
 const NoteDetailPage = (props) => {
   const [inEditMode, setInEditMode] = useState(false);
@@ -17,7 +18,6 @@ const NoteDetailPage = (props) => {
   const { content, title } = note;
 
   const { history } = props;
-  const { push } = history;
 
   const { username } = useSelector((store) => ({
     username: store.username,
@@ -160,6 +160,8 @@ const NoteDetailPage = (props) => {
           </div>
         </form>
       </div>
+
+      <CommentSubmit />
       <Modal
         title={"Delete Note"}
         visible={modalVisible}
