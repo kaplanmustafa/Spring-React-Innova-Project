@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -37,5 +38,12 @@ public class CommentController {
                                        @PathVariable long noteId) {
 
         return ResponseEntity.ok(commentService.getOldComments(id, noteId, page).map(CommentVM::new));
+    }
+
+    @DeleteMapping("/comments/{id:[0-9]+}")
+    @PreAuthorize("@commentSecurity.isAllowedToDelete(#id, principal)")
+    GenericResponse deleteComment(@PathVariable long id) {
+        commentService.delete(id);
+        return new GenericResponse("Comment removed");
     }
 }

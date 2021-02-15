@@ -54,6 +54,10 @@ public class CommentService {
         return commentRepository.findAll(specification, page);
     }
 
+    public void delete(long id) {
+        commentRepository.deleteById(id);
+    }
+
     Specification<Comment> idLessThan(long id) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.lessThan(root.get("id"), id);
     }
