@@ -5,9 +5,12 @@ import com.innova.ws.error.NotFoundException;
 import com.innova.ws.note.Note;
 import com.innova.ws.note.NoteService;
 import com.innova.ws.user.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.stream.DoubleStream;
 
 @Service
 public class CommentService {
@@ -35,5 +38,10 @@ public class CommentService {
         newComment.setTimestamp(new Date());
         newComment.setNote(note);
         commentRepository.save(newComment);
+    }
+
+    public Page<Comment> getCommentsOfNote(long noteId, Pageable page) {
+        Note inDB = noteService.getNoteByNoteId(noteId);
+        return commentRepository.findByNote(inDB, page);
     }
 }
