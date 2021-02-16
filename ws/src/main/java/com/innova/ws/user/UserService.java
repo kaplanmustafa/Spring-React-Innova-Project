@@ -1,7 +1,7 @@
 package com.innova.ws.user;
 
 import com.innova.ws.error.NotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import com.innova.ws.user.vm.UserVM;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,5 +29,13 @@ public class UserService {
         }
 
         return inDB;
+    }
+
+    public User updateUser(String username, UserVM updatedUser) {
+        User inDB = getByUsername(username);
+        inDB.setUsername(updatedUser.getUsername());
+        inDB.setFullName(updatedUser.getFullName());
+
+        return userRepository.save(inDB);
     }
 }
