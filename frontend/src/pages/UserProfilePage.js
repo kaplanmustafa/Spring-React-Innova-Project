@@ -7,6 +7,11 @@ import Modal from "../components/toolbox/Modal";
 const UserProfilePage = () => {
   const [inEditMode, setInEditMode] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [updatedUsername, setUpdatedUsername] = useState();
+  const [updatedFullName, setUpdatedFullName] = useState();
+  const [currentPassword, setCurrentPassword] = useState();
+  const [updatedPassword, setUpdatedPassword] = useState();
+  const [updatedPasswordRepeat, setUpdatedPasswordRepeat] = useState();
 
   const { username, fullName } = useSelector((store) => ({
     username: store.username,
@@ -43,8 +48,20 @@ const UserProfilePage = () => {
           {inEditMode && (
             <div className="container row">
               <div className="container col-6 text-left">
-                <Input label={"Username"} defaultValue={username} />
-                <Input label={"Full Name"} defaultValue={fullName} />
+                <Input
+                  label={"Username"}
+                  defaultValue={username}
+                  onChange={(event) => {
+                    setUpdatedUsername(event.target.value);
+                  }}
+                />
+                <Input
+                  label={"Full Name"}
+                  defaultValue={fullName}
+                  onChange={(event) => {
+                    setUpdatedFullName(event.target.value);
+                  }}
+                />
                 <div>
                   <ButtonWithProgress
                     className="btn btn-primary d-inline-flex"
@@ -63,16 +80,25 @@ const UserProfilePage = () => {
                   label={"Current Password"}
                   onChange={(event) => {}}
                   type="password"
+                  onChange={(event) => {
+                    setCurrentPassword(event.target.value);
+                  }}
                 />
                 <Input
                   label={"New Password"}
                   onChange={(event) => {}}
                   type="password"
+                  onChange={(event) => {
+                    setUpdatedPassword(event.target.value);
+                  }}
                 />
                 <Input
                   label={"New Password Repeat"}
                   onChange={(event) => {}}
                   type="password"
+                  onChange={(event) => {
+                    setUpdatedPasswordRepeat(event.target.value);
+                  }}
                 />
                 <div className="text-right">
                   <ButtonWithProgress
