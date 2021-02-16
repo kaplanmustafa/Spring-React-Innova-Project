@@ -1,4 +1,4 @@
-package com.innova.ws.user;
+package com.innova.ws.user.validator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

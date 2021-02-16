@@ -120,6 +120,7 @@ const UserProfilePage = () => {
                   <button
                     className="btn btn-danger d-inline-flex ml-1"
                     onClick={onClickCancel}
+                    disabled={pendingApiCall}
                   >
                     Cancel
                   </button>

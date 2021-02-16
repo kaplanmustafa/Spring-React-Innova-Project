@@ -1,6 +1,7 @@
 package com.innova.ws.user;
 
 import com.innova.ws.note.Note;
+import com.innova.ws.user.validator.UniqueUsername;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;

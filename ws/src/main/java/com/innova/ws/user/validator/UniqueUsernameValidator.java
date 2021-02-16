@@ -1,5 +1,7 @@
-package com.innova.ws.user;
+package com.innova.ws.user.validator;
 
+import com.innova.ws.user.User;
+import com.innova.ws.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

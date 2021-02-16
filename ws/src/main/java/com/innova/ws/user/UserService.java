@@ -1,6 +1,7 @@
 package com.innova.ws.user;
 
 import com.innova.ws.error.NotFoundException;
+import com.innova.ws.user.vm.PasswordUpdateVM;
 import com.innova.ws.user.vm.UserUpdateVM;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -37,5 +38,11 @@ public class UserService {
         inDB.setFullName(updatedUser.getFullName());
 
         return userRepository.save(inDB);
+    }
+
+    public void updatePassword(String username, PasswordUpdateVM passwordUpdateVM) {
+        User inDB = getByUsername(username);
+        inDB.setPassword(this.passwordEncoder.encode(passwordUpdateVM.getNewPassword()));
+        userRepository.save(inDB);
     }
 }

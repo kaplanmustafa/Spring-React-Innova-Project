@@ -1,6 +1,7 @@
 package com.innova.ws.user;
 
 import com.innova.ws.shared.GenericResponse;
+import com.innova.ws.user.vm.PasswordUpdateVM;
 import com.innova.ws.user.vm.UserUpdateVM;
 import com.innova.ws.user.vm.UserVM;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class UserController {
     @PostMapping("/users")
     public GenericResponse createUser(@Valid @RequestBody User user) {
         userService.save(user);
-        return new GenericResponse("user created");
+        return new GenericResponse("User created");
     }
 
     @PutMapping("/users/{username}")
@@ -27,5 +28,12 @@ public class UserController {
     UserVM updateUser(@Valid @RequestBody UserUpdateVM updatedUser, @PathVariable String username) {
         User user = userService.updateUser(username, updatedUser);
         return new UserVM(user);
+    }
+
+    @PutMapping("/users/password/{username}")
+    @PreAuthorize("#username == principal.username")
+    GenericResponse updatePassword(@Valid @RequestBody PasswordUpdateVM updatedPassword, @PathVariable String username) {
+        userService.updatePassword(username, updatedPassword);
+        return new GenericResponse("Password updated");
     }
 }

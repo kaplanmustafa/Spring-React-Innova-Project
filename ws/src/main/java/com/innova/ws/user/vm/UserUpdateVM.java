@@ -1,6 +1,6 @@
 package com.innova.ws.user.vm;
 
-import com.innova.ws.user.UniqueUsername;
+import com.innova.ws.user.validator.UniqueUsername;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
