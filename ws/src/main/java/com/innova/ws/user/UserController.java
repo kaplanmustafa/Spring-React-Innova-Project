@@ -1,6 +1,7 @@
 package com.innova.ws.user;
 
 import com.innova.ws.shared.GenericResponse;
+import com.innova.ws.user.vm.UserUpdateVM;
 import com.innova.ws.user.vm.UserVM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,7 +24,7 @@ public class UserController {
 
     @PutMapping("/users/{username}")
     @PreAuthorize("#username == principal.username") // pricipal --> loggedInUser
-    UserVM updateUser(@Valid @RequestBody UserVM updatedUser, @PathVariable String username) {
+    UserVM updateUser(@Valid @RequestBody UserUpdateVM updatedUser, @PathVariable String username) {
         User user = userService.updateUser(username, updatedUser);
         return new UserVM(user);
     }

@@ -1,26 +1,52 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ButtonWithProgress from "../components/toolbox/ButtonWithProgress";
 import Input from "../components/toolbox/Input";
 import Modal from "../components/toolbox/Modal";
+import { updateUser } from "../api/ApiCalls";
+import { updateSuccess } from "../redux/authActions";
+import { useApiProgress } from "../shared/ApiProgress";
 
 const UserProfilePage = () => {
-  const [inEditMode, setInEditMode] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [updatedUsername, setUpdatedUsername] = useState();
-  const [updatedFullName, setUpdatedFullName] = useState();
-  const [currentPassword, setCurrentPassword] = useState();
-  const [updatedPassword, setUpdatedPassword] = useState();
-  const [updatedPasswordRepeat, setUpdatedPasswordRepeat] = useState();
-
   const { username, fullName } = useSelector((store) => ({
     username: store.username,
     fullName: store.fullName,
   }));
 
+  const [inEditMode, setInEditMode] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [updatedUsername, setUpdatedUsername] = useState(username);
+  const [updatedFullName, setUpdatedFullName] = useState(fullName);
+  const [currentPassword, setCurrentPassword] = useState();
+  const [updatedPassword, setUpdatedPassword] = useState();
+  const [updatedPasswordRepeat, setUpdatedPasswordRepeat] = useState();
+  const [validationErrors, setValidationErrors] = useState({});
+
+  const dispatch = useDispatch();
+
+  const onClickSaveUser = async () => {
+    const body = {
+      username: updatedUsername,
+      fullName: updatedFullName,
+    };
+
+    try {
+      const response = await updateUser(username, body);
+      setInEditMode(false);
+      dispatch(updateSuccess(response.data));
+    } catch (error) {
+      setValidationErrors(error.response.data.validationErrors);
+    }
+  };
+
   const onClickCancelModal = () => {
     setModalVisible(false);
   };
+
+  const pendingApiCall = useApiProgress("put", "/api/1.0/users/" + username);
+  const { username: usernameError, fullName: fullNameError } = validationErrors;
+  const saveButtonEnabled =
+    username === updatedUsername && fullName === updatedFullName;
 
   return (
     <div className="container mt-5">
@@ -54,6 +80,7 @@ const UserProfilePage = () => {
                   onChange={(event) => {
                     setUpdatedUsername(event.target.value);
                   }}
+                  error={usernameError}
                 />
                 <Input
                   label={"Full Name"}
@@ -61,11 +88,15 @@ const UserProfilePage = () => {
                   onChange={(event) => {
                     setUpdatedFullName(event.target.value);
                   }}
+                  error={fullNameError}
                 />
                 <div>
                   <ButtonWithProgress
                     className="btn btn-primary d-inline-flex"
                     text={"Save"}
+                    onClick={onClickSaveUser}
+                    disabled={pendingApiCall || saveButtonEnabled}
+                    pendingApiCall={pendingApiCall}
                   />
                   <button
                     className="btn btn-danger d-inline-flex ml-1"
@@ -104,6 +135,7 @@ const UserProfilePage = () => {
                   <ButtonWithProgress
                     className="btn btn-primary d-inline-flex"
                     text={"Update"}
+                    disabled={pendingApiCall}
                   />
                 </div>
               </div>
