@@ -5,7 +5,7 @@ import DateConverter from "./toolbox/DateConverter";
 import Modal from "./toolbox/Modal";
 
 const CommentView = (props) => {
-  const { comment, commentId, timestamp } = props;
+  const { comment, commentId, timestamp, onChange } = props;
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -18,6 +18,7 @@ const CommentView = (props) => {
   const onClickDelete = async () => {
     await deleteComment(commentId);
     setModalVisible(false);
+    onChange();
   };
 
   const onClickCancelModal = () => {

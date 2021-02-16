@@ -4,9 +4,11 @@ import { saveComment } from "../api/ApiCalls";
 import { useApiProgress } from "../shared/ApiProgress";
 import ButtonWithProgress from "./toolbox/ButtonWithProgress";
 
-const CommentSubmit = () => {
+const CommentSubmit = (props) => {
   const [focused, setFocused] = useState(false);
   const [comment, setComment] = useState("");
+
+  const { onChange } = props;
 
   useEffect(() => {
     if (!focused) {
@@ -30,6 +32,7 @@ const CommentSubmit = () => {
     try {
       await saveComment(body, noteId);
       setFocused(false);
+      onChange();
     } catch (error) {}
   };
 

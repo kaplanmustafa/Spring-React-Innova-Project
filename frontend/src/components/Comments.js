@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { getComments, getOldComments } from "../api/ApiCalls";
 import { useApiProgress } from "../shared/ApiProgress";
+import CommentSubmit from "./CommentSubmit";
 import CommentView from "./CommentView";
 import ButtonWithProgress from "./toolbox/ButtonWithProgress";
 
@@ -28,25 +29,10 @@ const Comments = () => {
     loadComments();
   }, [noteId, commentCount]);
 
-  useEffect(() => {
-    let looper = setInterval(loadCommentsForDifference, 5000);
-
-    return function cleanup() {
-      clearInterval(looper);
-    };
-  }, [username]);
-
   const loadComments = async () => {
     try {
       const response = await getComments(noteId);
       setPage(response.data);
-      setCommentCount(response.data.totalElements);
-    } catch (error) {}
-  };
-
-  const loadCommentsForDifference = async () => {
-    try {
-      const response = await getComments(noteId);
       setCommentCount(response.data.totalElements);
     } catch (error) {}
   };
@@ -69,29 +55,33 @@ const Comments = () => {
   const { content, last } = page;
 
   return (
-    <div className="col-10 mb-5">
-      {content.map((item) => {
-        return (
-          <CommentView
-            commentId={item.id}
-            comment={item.comment}
-            timestamp={item.timestamp}
-            key={item.id}
-          />
-        );
-      })}
-      {!last && (
-        <div className="container text-center mt-5">
-          <ButtonWithProgress
-            disabled={loadOldCommentsProgress}
-            onClick={loadOldComments}
-            text={"Load More"}
-            pendingApiCall={loadOldCommentsProgress}
-            className={"btn btn-primary w-25"}
-          ></ButtonWithProgress>
-        </div>
-      )}
-    </div>
+    <>
+      <CommentSubmit onChange={loadComments} />
+      <div className="col-10 mb-5">
+        {content.map((item) => {
+          return (
+            <CommentView
+              commentId={item.id}
+              comment={item.comment}
+              timestamp={item.timestamp}
+              key={item.id}
+              onChange={loadComments}
+            />
+          );
+        })}
+        {!last && (
+          <div className="container text-center mt-5">
+            <ButtonWithProgress
+              disabled={loadOldCommentsProgress}
+              onClick={loadOldComments}
+              text={"Load More"}
+              pendingApiCall={loadOldCommentsProgress}
+              className={"btn btn-primary w-25"}
+            ></ButtonWithProgress>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

@@ -6,7 +6,6 @@ import { updateNote } from "../api/ApiCalls";
 import ButtonWithProgress from "../components/toolbox/ButtonWithProgress";
 import { useApiProgress } from "../shared/ApiProgress";
 import Modal from "../components/toolbox/Modal";
-import CommentSubmit from "../components/CommentSubmit";
 import Comments from "../components/Comments";
 
 const NoteDetailPage = (props) => {
@@ -162,7 +161,6 @@ const NoteDetailPage = (props) => {
         </form>
       </div>
 
-      <CommentSubmit />
       <Comments />
       <Modal
         title={"Delete Note"}
