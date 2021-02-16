@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { getComments, getOldComments } from "../api/ApiCalls";
 import { useApiProgress } from "../shared/ApiProgress";
@@ -12,10 +11,6 @@ const Comments = () => {
     content: [],
   });
   const [commentCount, setCommentCount] = useState();
-
-  const { username } = useSelector((store) => ({
-    username: store.username,
-  }));
 
   const { noteId } = useParams();
 

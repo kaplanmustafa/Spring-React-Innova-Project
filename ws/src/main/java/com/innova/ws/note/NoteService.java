@@ -46,7 +46,8 @@ public class NoteService {
     }
 
     public Page<Note> getOldNotes(long id, String username, Pageable page) {
-        Specification<Note> specification = idLessThan(id);
+        Note note = noteRepository.getOne(id);
+        Specification<Note> specification = timestampLessThan(note.getTimestamp());
 
         if(username != null) {
             User inDB = userService.getByUsername(username);
@@ -66,8 +67,8 @@ public class NoteService {
         noteRepository.deleteById(id);
     }
 
-    Specification<Note> idLessThan(long id) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.lessThan(root.get("id"), id);
+    Specification<Note> timestampLessThan(Date timestamp) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.lessThan(root.get("timestamp"), timestamp);
     }
 
     Specification<Note> userIs(User user) {
