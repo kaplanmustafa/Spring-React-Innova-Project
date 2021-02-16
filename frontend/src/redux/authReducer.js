@@ -15,6 +15,11 @@ const authReducer = (state = { ...defaultState }, action) => {
     };
   } else if (action.type === ACTIONS.LOGOUT_SUCCESS) {
     return defaultState;
+  } else if (action.type === ACTIONS.UPDATE_SUCCESS) {
+    return {
+      ...state,
+      ...action.payload,
+    };
   }
   return state;
 };
