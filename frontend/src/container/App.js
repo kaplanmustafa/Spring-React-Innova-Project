@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import Navbar from "../components/shared/Navbar";
 import AddNotePage from "../pages/AddNotePage";
 import NoteDetailPage from "../pages/NoteDetailPage";
+import UserProfilePage from "../pages/UserProfilePage";
 
 function App() {
   const { isLoggedIn } = useSelector((store) => ({
@@ -22,6 +23,7 @@ function App() {
         {!isLoggedIn && <Route path="/signup" component={UserSignupPage} />}
         {!isLoggedIn && <Route path="/login" component={LoginPage} />}
         {isLoggedIn && <Route path="/addNote" component={AddNotePage} />}
+        {isLoggedIn && <Route exact path="/user" component={UserProfilePage} />}
         {isLoggedIn && (
           <Route path="/note/:noteId" component={NoteDetailPage} />
         )}

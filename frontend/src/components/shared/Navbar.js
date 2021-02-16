@@ -35,6 +35,11 @@ const Navbar = () => {
               <Link to={"/addNote"}>
                 <button className="btn btn-outline-primary">New Note</button>
               </Link>
+              <Link to={"/user"}>
+                <button className="btn btn-outline-secondary ml-1">
+                  Profile
+                </button>
+              </Link>
               <button
                 className="btn btn-outline-danger ml-1"
                 onClick={onLogoutSuccess}
