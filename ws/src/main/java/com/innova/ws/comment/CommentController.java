@@ -1,5 +1,6 @@
 package com.innova.ws.comment;
 
+import com.innova.ws.comment.vm.CommentUpdateVM;
 import com.innova.ws.comment.vm.CommentVM;
 import com.innova.ws.shared.CurrentUser;
 import com.innova.ws.shared.GenericResponse;
@@ -45,5 +46,12 @@ public class CommentController {
     GenericResponse deleteComment(@PathVariable long id) {
         commentService.delete(id);
         return new GenericResponse("Comment removed");
+    }
+
+    @PutMapping("/comments/{username}/{commentId}")
+    @PreAuthorize("#username == principal.username")
+    CommentVM updateComment(@RequestBody CommentUpdateVM updatedComment, @PathVariable String username, @PathVariable long commentId) {
+        Comment comment = commentService.updateComment(commentId, updatedComment);
+        return new CommentVM(comment);
     }
 }

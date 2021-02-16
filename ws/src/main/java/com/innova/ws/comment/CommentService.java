@@ -1,5 +1,6 @@
 package com.innova.ws.comment;
 
+import com.innova.ws.comment.vm.CommentUpdateVM;
 import com.innova.ws.error.ForbiddenException;
 import com.innova.ws.error.NotFoundException;
 import com.innova.ws.note.Note;
@@ -11,6 +12,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class CommentService {
@@ -56,6 +58,20 @@ public class CommentService {
 
     public void delete(long id) {
         commentRepository.deleteById(id);
+    }
+
+    public Comment getCommentByCommentId(long id) {
+        Optional<Comment> inDB = commentRepository.findById(id);
+
+        return inDB.orElse(null);
+    }
+
+    public Comment updateComment(long commentId, CommentUpdateVM updatedComment) {
+        Comment inDB = getCommentByCommentId(commentId);
+        inDB.setComment(updatedComment.getComment());
+        inDB.setTimestamp(new Date());
+
+        return commentRepository.save(inDB);
     }
 
     Specification<Comment> idLessThan(long id) {
