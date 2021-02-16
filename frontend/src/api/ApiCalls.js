@@ -68,3 +68,7 @@ export const getOldComments = (id, noteId, size = 3) => {
 export const deleteComment = (id) => {
   return axios.delete(`/api/1.0/comments/${id}`);
 };
+
+export const deleteUser = (username) => {
+  return axios.delete(`/api/1.0/users/${username}`);
+};

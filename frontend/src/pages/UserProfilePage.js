@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import ButtonWithProgress from "../components/toolbox/ButtonWithProgress";
 import Input from "../components/toolbox/Input";
 import Modal from "../components/toolbox/Modal";
-import { updateUser, updatePassword } from "../api/ApiCalls";
-import { updateSuccess } from "../redux/authActions";
+import { updateUser, updatePassword, deleteUser } from "../api/ApiCalls";
+import { logoutSuccess, updateSuccess } from "../redux/authActions";
 import { useApiProgress } from "../shared/ApiProgress";
 
-const UserProfilePage = () => {
+const UserProfilePage = (props) => {
   const { username, fullName } = useSelector((store) => ({
     username: store.username,
     fullName: store.fullName,
@@ -24,6 +24,7 @@ const UserProfilePage = () => {
   const [isUpdateSuccess, setIsUpdateSucces] = useState(false);
 
   const dispatch = useDispatch();
+  const { history } = props;
 
   const onClickSaveUser = async () => {
     const body = {
@@ -69,6 +70,13 @@ const UserProfilePage = () => {
     }
   }, [inEditMode]);
 
+  const onClickDeleteUser = async () => {
+    await deleteUser(username);
+    setModalVisible(false);
+    dispatch(logoutSuccess());
+    history.push("/login");
+  };
+
   const onClickCancelModal = () => {
     setModalVisible(false);
   };
@@ -77,6 +85,11 @@ const UserProfilePage = () => {
   const pendingApiCallPassword = useApiProgress(
     "put",
     "/api/1.0/users/password/" + username
+  );
+  const pendingApiCallDeleteUser = useApiProgress(
+    "delete",
+    `/api/1.0/users/${username}`,
+    true
   );
 
   const {
@@ -103,16 +116,16 @@ const UserProfilePage = () => {
         <div className="card-body">
           {!inEditMode && (
             <>
-              <h3>{fullName}</h3>
+              <h3 className="mt-3 mb-4">{fullName}</h3>
               <button
-                className="btn btn-success d-inline-flex"
+                className="btn btn-success d-inline-flex mb-2"
                 onClick={() => setInEditMode(true)}
               >
                 Edit
               </button>
               <div className="pt-2">
                 <button
-                  className="btn btn-danger d-inline-flex"
+                  className="btn btn-danger d-inline-flex mb-3"
                   onClick={() => setModalVisible(true)}
                 >
                   Delete My Account
@@ -239,10 +252,12 @@ const UserProfilePage = () => {
         </div>
         <Modal
           title={"Delete My Account"}
+          onClickOk={onClickDeleteUser}
           okButton={"Delete My Account"}
           visible={modalVisible}
           onClickCancel={onClickCancelModal}
           message={"Are you sure to delete your account?"}
+          pendingApiCall={pendingApiCallDeleteUser}
         />
       </div>
     </div>
