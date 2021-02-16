@@ -4,11 +4,10 @@ import { logoutSuccess } from "../../redux/authActions";
 import { Link, useHistory } from "react-router-dom";
 
 const Navbar = () => {
-  const { isLoggedIn, fullName, username } = useSelector((store) => {
+  const { isLoggedIn, fullName } = useSelector((store) => {
     return {
       isLoggedIn: store.isLoggedIn,
       fullName: store.fullName,
-      username: store.username,
     };
   });
 
@@ -25,7 +24,7 @@ const Navbar = () => {
     <div className="mb-3 shadow-sm">
       <nav className="navbar navbar-expand-lg navbar-light container">
         {isLoggedIn && (
-          <Link to={`/mynotes/${username}`}>
+          <Link to={"/"}>
             <div className="navbar-brand">My Notes | {fullName}</div>
           </Link>
         )}

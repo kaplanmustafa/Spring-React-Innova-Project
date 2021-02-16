@@ -18,7 +18,7 @@ function App() {
     <HashRouter>
       <Navbar />
       <Switch>
-        {isLoggedIn && <Route path="/mynotes/:username" component={UserPage} />}
+        {isLoggedIn && <Route exact path="/" component={UserPage} />}
         {!isLoggedIn && <Route path="/signup" component={UserSignupPage} />}
         {!isLoggedIn && <Route path="/login" component={LoginPage} />}
         {isLoggedIn && <Route path="/addNote" component={AddNotePage} />}
@@ -26,6 +26,7 @@ function App() {
           <Route path="/note/:noteId" component={NoteDetailPage} />
         )}
         <Route path="/error" component={ErrorPage} />
+        {isLoggedIn && <Redirect to="/" />}
         <Redirect to="/error" />
       </Switch>
     </HashRouter>
