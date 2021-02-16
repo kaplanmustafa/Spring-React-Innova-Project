@@ -45,4 +45,9 @@ public class UserService {
         inDB.setPassword(this.passwordEncoder.encode(passwordUpdateVM.getNewPassword()));
         userRepository.save(inDB);
     }
+
+    public void deleteUser(String username) {
+        User inDB = userRepository.findByUsername(username);
+        userRepository.delete(inDB);
+    }
 }

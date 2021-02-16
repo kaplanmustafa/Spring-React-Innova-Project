@@ -36,4 +36,11 @@ public class UserController {
         userService.updatePassword(username, updatedPassword);
         return new GenericResponse("Password updated");
     }
+
+    @DeleteMapping("/users/{username}")
+    @PreAuthorize("#username == principal.username")
+    GenericResponse deleteUser(@PathVariable String username) {
+        userService.deleteUser(username);
+        return new GenericResponse("User removed");
+    }
 }
