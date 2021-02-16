@@ -1,5 +1,6 @@
 package com.innova.ws.user.vm;
 
+import com.innova.ws.user.UniqueUsername;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -10,6 +11,7 @@ public class UserUpdateVM {
 
     @NotNull(message = "{ws.constraints.username.NotNull.message}")
     @Size(min = 4, max= 255)
+    @UniqueUsername
     private String username;
 
     @NotNull

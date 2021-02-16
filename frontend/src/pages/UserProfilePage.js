@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ButtonWithProgress from "../components/toolbox/ButtonWithProgress";
 import Input from "../components/toolbox/Input";
@@ -37,6 +37,13 @@ const UserProfilePage = () => {
     } catch (error) {
       setValidationErrors(error.response.data.validationErrors);
     }
+  };
+
+  const onClickCancel = () => {
+    setInEditMode(false);
+    setValidationErrors({});
+    setUpdatedUsername(username);
+    setUpdatedFullName(fullName);
   };
 
   const onClickCancelModal = () => {
@@ -79,6 +86,12 @@ const UserProfilePage = () => {
                   defaultValue={username}
                   onChange={(event) => {
                     setUpdatedUsername(event.target.value);
+                    setValidationErrors((previousValidationErrors) => {
+                      return {
+                        ...previousValidationErrors,
+                        username: undefined,
+                      };
+                    });
                   }}
                   error={usernameError}
                 />
@@ -87,6 +100,12 @@ const UserProfilePage = () => {
                   defaultValue={fullName}
                   onChange={(event) => {
                     setUpdatedFullName(event.target.value);
+                    setValidationErrors((previousValidationErrors) => {
+                      return {
+                        ...previousValidationErrors,
+                        fullName: undefined,
+                      };
+                    });
                   }}
                   error={fullNameError}
                 />
@@ -100,7 +119,7 @@ const UserProfilePage = () => {
                   />
                   <button
                     className="btn btn-danger d-inline-flex ml-1"
-                    onClick={() => setInEditMode(false)}
+                    onClick={onClickCancel}
                   >
                     Cancel
                   </button>
