@@ -66,7 +66,7 @@ const NoteDetailPage = (props) => {
   const onClickDelete = async () => {
     await deleteNote(noteId);
     setModalVisible(false);
-    history.push(`/mynotes/${username}`);
+    history.push("/");
   };
 
   const onClickCancelModal = () => {
