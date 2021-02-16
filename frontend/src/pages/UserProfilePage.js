@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ButtonWithProgress from "../components/toolbox/ButtonWithProgress";
 import Input from "../components/toolbox/Input";
 import Modal from "../components/toolbox/Modal";
-import { updateUser } from "../api/ApiCalls";
+import { updateUser, updatePassword } from "../api/ApiCalls";
 import { updateSuccess } from "../redux/authActions";
 import { useApiProgress } from "../shared/ApiProgress";
 
@@ -17,10 +17,11 @@ const UserProfilePage = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [updatedUsername, setUpdatedUsername] = useState(username);
   const [updatedFullName, setUpdatedFullName] = useState(fullName);
-  const [currentPassword, setCurrentPassword] = useState();
-  const [updatedPassword, setUpdatedPassword] = useState();
-  const [updatedPasswordRepeat, setUpdatedPasswordRepeat] = useState();
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [updatedPassword, setUpdatedPassword] = useState("");
+  const [updatedPasswordRepeat, setUpdatedPasswordRepeat] = useState("");
   const [validationErrors, setValidationErrors] = useState({});
+  const [isUpdateSuccess, setIsUpdateSucces] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -34,26 +35,67 @@ const UserProfilePage = () => {
       const response = await updateUser(username, body);
       setInEditMode(false);
       dispatch(updateSuccess(response.data));
+      setIsUpdateSucces(true);
     } catch (error) {
       setValidationErrors(error.response.data.validationErrors);
     }
   };
 
-  const onClickCancel = () => {
-    setInEditMode(false);
+  const onClickUpdatePassword = async () => {
+    const body = {
+      currentPassword: currentPassword,
+      newPassword: updatedPassword,
+    };
+
+    try {
+      await updatePassword(username, body);
+      setInEditMode(false);
+      setIsUpdateSucces(true);
+    } catch (error) {
+      setValidationErrors(error.response.data.validationErrors);
+    }
+  };
+
+  useEffect(() => {
     setValidationErrors({});
     setUpdatedUsername(username);
     setUpdatedFullName(fullName);
-  };
+    setCurrentPassword();
+    setUpdatedPassword();
+    setUpdatedPasswordRepeat();
+
+    if (inEditMode) {
+      setIsUpdateSucces(false);
+    }
+  }, [inEditMode]);
 
   const onClickCancelModal = () => {
     setModalVisible(false);
   };
 
   const pendingApiCall = useApiProgress("put", "/api/1.0/users/" + username);
-  const { username: usernameError, fullName: fullNameError } = validationErrors;
+  const pendingApiCallPassword = useApiProgress(
+    "put",
+    "/api/1.0/users/password/" + username
+  );
+
+  const {
+    username: usernameError,
+    fullName: fullNameError,
+    currentPassword: passwordError,
+    newPassword: newPasswordError,
+  } = validationErrors;
   const saveButtonEnabled =
     username === updatedUsername && fullName === updatedFullName;
+
+  let passwordRepeatError;
+  if (updatedPassword !== updatedPasswordRepeat) {
+    passwordRepeatError = "Password mismatch";
+  }
+  const updateButtonEnabled =
+    currentPassword === "" ||
+    updatedPassword === "" ||
+    updatedPasswordRepeat === "";
 
   return (
     <div className="container mt-5">
@@ -76,6 +118,13 @@ const UserProfilePage = () => {
                   Delete My Account
                 </button>
               </div>
+              {isUpdateSuccess && (
+                <div className="container text-center mt-5">
+                  <div className="alert alert-info">
+                    <div className="mt-2 mb-2">Update Successful</div>
+                  </div>
+                </div>
+              )}
             </>
           )}
           {inEditMode && (
@@ -114,13 +163,17 @@ const UserProfilePage = () => {
                     className="btn btn-primary d-inline-flex"
                     text={"Save"}
                     onClick={onClickSaveUser}
-                    disabled={pendingApiCall || saveButtonEnabled}
+                    disabled={
+                      pendingApiCall ||
+                      saveButtonEnabled ||
+                      pendingApiCallPassword
+                    }
                     pendingApiCall={pendingApiCall}
                   />
                   <button
                     className="btn btn-danger d-inline-flex ml-1"
-                    onClick={onClickCancel}
-                    disabled={pendingApiCall}
+                    onClick={() => setInEditMode(false)}
+                    disabled={pendingApiCall || pendingApiCallPassword}
                   >
                     Cancel
                   </button>
@@ -131,22 +184,37 @@ const UserProfilePage = () => {
                   label={"Current Password"}
                   onChange={(event) => {}}
                   type="password"
+                  error={passwordError}
                   onChange={(event) => {
                     setCurrentPassword(event.target.value);
+                    setValidationErrors((previousValidationErrors) => {
+                      return {
+                        ...previousValidationErrors,
+                        currentPassword: undefined,
+                      };
+                    });
                   }}
                 />
                 <Input
                   label={"New Password"}
                   onChange={(event) => {}}
                   type="password"
+                  error={newPasswordError}
                   onChange={(event) => {
                     setUpdatedPassword(event.target.value);
+                    setValidationErrors((previousValidationErrors) => {
+                      return {
+                        ...previousValidationErrors,
+                        newPassword: undefined,
+                      };
+                    });
                   }}
                 />
                 <Input
                   label={"New Password Repeat"}
                   onChange={(event) => {}}
                   type="password"
+                  error={passwordRepeatError}
                   onChange={(event) => {
                     setUpdatedPasswordRepeat(event.target.value);
                   }}
@@ -155,7 +223,14 @@ const UserProfilePage = () => {
                   <ButtonWithProgress
                     className="btn btn-primary d-inline-flex"
                     text={"Update"}
-                    disabled={pendingApiCall}
+                    pendingApiCall={pendingApiCallPassword}
+                    disabled={
+                      pendingApiCallPassword ||
+                      pendingApiCall ||
+                      passwordRepeatError !== undefined ||
+                      updateButtonEnabled
+                    }
+                    onClick={onClickUpdatePassword}
                   />
                 </div>
               </div>

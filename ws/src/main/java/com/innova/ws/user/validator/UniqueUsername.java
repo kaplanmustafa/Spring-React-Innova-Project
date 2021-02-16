@@ -12,7 +12,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Constraint(validatedBy = { UniqueUsernameValidator.class })
 public @interface UniqueUsername {
-    String message() default "{innova.constraint.username.UniqueUsername.message}";
+    String message() default "{ws.constraint.username.UniqueUsername.message}";
     Class<?>[] groups() default { };
     Class<? extends Payload>[] payload() default { };
 }

@@ -12,6 +12,10 @@ export const updateUser = (username, body) => {
   return axios.put(`/api/1.0/users/${username}`, body);
 };
 
+export const updatePassword = (username, body) => {
+  return axios.put(`/api/1.0/users/password/${username}`, body);
+};
+
 export const setAuthorizationHeader = ({ token, isLoggedIn }) => {
   if (isLoggedIn) {
     const authorizationHeaderValue = `Bearer ${token}`;
