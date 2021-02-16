@@ -48,7 +48,8 @@ public class CommentService {
     }
 
     public Page<Comment> getOldComments(long id, long noteId, Pageable page) {
-        Specification<Comment> specification = idLessThan(id);
+        Comment comment = commentRepository.getOne(id);
+        Specification<Comment> specification = timestampLessThan(comment.getTimestamp());
 
         Note inDB = noteService.getNoteByNoteId(noteId);
         specification = specification.and(noteIs(inDB));
@@ -74,8 +75,8 @@ public class CommentService {
         return commentRepository.save(inDB);
     }
 
-    Specification<Comment> idLessThan(long id) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.lessThan(root.get("id"), id);
+    Specification<Comment> timestampLessThan(Date timestamp) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.lessThan(root.get("timestamp"), timestamp);
     }
 
     Specification<Comment> noteIs(Note note) {

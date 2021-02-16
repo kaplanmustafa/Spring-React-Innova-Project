@@ -30,12 +30,12 @@ public class CommentController {
     }
 
     @GetMapping("/users/comments/{noteId}")
-    Page<CommentVM> getCommentsOfNote(@PathVariable long noteId, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable page) {
+    Page<CommentVM> getCommentsOfNote(@PathVariable long noteId, @PageableDefault(sort = "timestamp", direction = Sort.Direction.DESC) Pageable page) {
         return commentService.getCommentsOfNote(noteId, page).map(CommentVM::new);
     }
 
     @GetMapping({ "/users/{noteId}/comments/{id:[0-9]+}"})
-    ResponseEntity<?> getCommentsRelative(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable page, @PathVariable long id,
+    ResponseEntity<?> getCommentsRelative(@PageableDefault(sort = "timestamp", direction = Sort.Direction.DESC) Pageable page, @PathVariable long id,
                                        @PathVariable long noteId) {
 
         return ResponseEntity.ok(commentService.getOldComments(id, noteId, page).map(CommentVM::new));
