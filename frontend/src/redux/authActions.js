@@ -33,6 +33,7 @@ export const loginHandler = (credentials) => {
     const authState = {
       ...response.data.user,
       token: response.data.token,
+      role: response.data.role,
     };
 
     dispatch(loginSuccess(authState));

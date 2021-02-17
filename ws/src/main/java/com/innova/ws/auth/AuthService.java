@@ -50,6 +50,7 @@ public class AuthService {
         AuthResponse response = new AuthResponse();
         response.setUser(userVM);
         response.setToken(token);
+        response.setRole(inDB.getRole().getName());
         return response;
     }
 
@@ -60,10 +61,9 @@ public class AuthService {
         try {
             parser.parse(token);
             Claims claims = parser.parseClaimsJws(token).getBody();
-            long userId = new Long(claims.getSubject());
+            long userId = Long.parseLong(claims.getSubject());
             User user = userRepository.getOne(userId);
-            User actualUser = (User) ((HibernateProxy) user).getHibernateLazyInitializer().getImplementation();
-            return actualUser;
+            return (User) ((HibernateProxy) user).getHibernateLazyInitializer().getImplementation();
         } catch (Exception e) {
             e.printStackTrace();
         }

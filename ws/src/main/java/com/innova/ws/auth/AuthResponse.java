@@ -9,4 +9,6 @@ public class AuthResponse {
     private String token;
 
     private UserVM user;
+
+    private String role;
 }
