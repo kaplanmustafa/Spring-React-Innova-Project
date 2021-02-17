@@ -4,10 +4,11 @@ import { logoutSuccess } from "../../redux/authActions";
 import { Link, useHistory } from "react-router-dom";
 
 const Navbar = () => {
-  const { isLoggedIn, fullName } = useSelector((store) => {
+  const { isLoggedIn, fullName, role } = useSelector((store) => {
     return {
       isLoggedIn: store.isLoggedIn,
       fullName: store.fullName,
+      role: store.role,
     };
   });
 
@@ -32,14 +33,18 @@ const Navbar = () => {
         <div className="container">
           {isLoggedIn && (
             <div className="ml-auto">
-              <Link to={"/addNote"}>
-                <button className="btn btn-outline-primary">New Note</button>
-              </Link>
-              <Link to={"/user"}>
-                <button className="btn btn-outline-secondary ml-1">
-                  Profile
-                </button>
-              </Link>
+              {role === "user" && (
+                <Link to={"/addNote"}>
+                  <button className="btn btn-outline-primary">New Note</button>
+                </Link>
+              )}
+              {role === "user" && (
+                <Link to={"/user"}>
+                  <button className="btn btn-outline-secondary ml-1">
+                    Profile
+                  </button>
+                </Link>
+              )}
               <button
                 className="btn btn-outline-danger ml-1"
                 onClick={onLogoutSuccess}

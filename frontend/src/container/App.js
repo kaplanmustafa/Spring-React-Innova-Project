@@ -10,23 +10,34 @@ import AddNotePage from "../pages/AddNotePage";
 import NoteDetailPage from "../pages/NoteDetailPage";
 import UserProfilePage from "../pages/UserProfilePage";
 import AdminLoginPage from "../pages/AdminLoginPage";
+import AdminPage from "../pages/AdminPage";
 
 function App() {
-  const { isLoggedIn } = useSelector((store) => ({
+  const { isLoggedIn, role } = useSelector((store) => ({
     isLoggedIn: store.isLoggedIn,
+    role: store.role,
   }));
 
   return (
     <HashRouter>
       <Navbar />
       <Switch>
-        {isLoggedIn && <Route exact path="/" component={UserPage} />}
+        {isLoggedIn && role === "user" && (
+          <Route exact path="/" component={UserPage} />
+        )}
+        {isLoggedIn && role === "admin" && (
+          <Route exact path="/" component={AdminPage} />
+        )}
         {!isLoggedIn && <Route path="/signup" component={UserSignupPage} />}
         {!isLoggedIn && <Route path="/login" component={LoginPage} />}
         {!isLoggedIn && <Route path="/admin" component={AdminLoginPage} />}
-        {isLoggedIn && <Route path="/addNote" component={AddNotePage} />}
-        {isLoggedIn && <Route exact path="/user" component={UserProfilePage} />}
-        {isLoggedIn && (
+        {isLoggedIn && role === "user" && (
+          <Route path="/addNote" component={AddNotePage} />
+        )}
+        {isLoggedIn && role === "user" && (
+          <Route exact path="/user" component={UserProfilePage} />
+        )}
+        {isLoggedIn && role === "user" && (
           <Route path="/note/:noteId" component={NoteDetailPage} />
         )}
         <Route path="/error" component={ErrorPage} />
