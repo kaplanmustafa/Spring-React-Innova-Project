@@ -1,6 +1,7 @@
 package com.innova.ws.user;
 
 import com.innova.ws.error.NotFoundException;
+import com.innova.ws.role.RoleService;
 import com.innova.ws.user.vm.PasswordUpdateVM;
 import com.innova.ws.user.vm.UserUpdateVM;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,15 +12,19 @@ public class UserService {
 
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
+    RoleService roleService;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleService roleService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.roleService = roleService;
     }
 
     public void save(User user) {
         user.setPassword(this.passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
+
+        roleService.saveUserRole(user, "user");
     }
 
     public User getByUsername(String username) {

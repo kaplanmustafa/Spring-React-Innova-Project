@@ -1,6 +1,7 @@
 package com.innova.ws.user;
 
 import com.innova.ws.note.Note;
+import com.innova.ws.role.Role;
 import com.innova.ws.user.validator.UniqueUsername;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -38,8 +39,11 @@ public class User implements UserDetails{
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Note> notes;
 
+    @OneToOne(mappedBy="user", cascade = CascadeType.REMOVE)
+    private Role role;
+
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.createAuthorityList("Role_user");
+        return AuthorityUtils.createAuthorityList("Role_" + role.getName());
     }
 
     public boolean isAccountNonExpired() {
