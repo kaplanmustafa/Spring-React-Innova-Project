@@ -25,6 +25,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
         http
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/1.0/users/{username}/notes").authenticated()
+                .antMatchers(HttpMethod.PUT, "/api/1.0/users/{username}").authenticated()
+                .antMatchers(HttpMethod.PUT, "/api/1.0/users/password/{username}").authenticated()
+                .antMatchers(HttpMethod.GET, "/api/1.0/users").authenticated()
+                .antMatchers(HttpMethod.DELETE, "/api/1.0/users/{username}").authenticated()
+                .antMatchers(HttpMethod.POST, "/api/1.0/notes").authenticated()
+                .antMatchers(HttpMethod.GET, "/api/1.0/users/{username}/notes").authenticated()
+                .antMatchers(HttpMethod.GET, "/api/1.0/users/{username}/notes/{id:[0-9]+}").authenticated()
+                .antMatchers(HttpMethod.GET, "/api/1.0/notes/{username}/{noteId}").authenticated()
+                .antMatchers(HttpMethod.DELETE, "/api/1.0/notes/{id:[0-9]+}").authenticated()
+                .antMatchers(HttpMethod.POST, "/api/1.0/comments/{noteId}").authenticated()
+                .antMatchers(HttpMethod.GET, "/api/1.0/users/comments/{noteId}").authenticated()
+                .antMatchers(HttpMethod.GET, "/api/1.0/users/{noteId}/comments/{id:[0-9]+}").authenticated()
+                .antMatchers(HttpMethod.DELETE, "/api/1.0/comments/{id:[0-9]+}").authenticated()
+                .antMatchers(HttpMethod.PUT, "/api/1.0/comments/{username}/{commentId}").authenticated()
+
                 .and()
                 .authorizeRequests().anyRequest().permitAll();
 
