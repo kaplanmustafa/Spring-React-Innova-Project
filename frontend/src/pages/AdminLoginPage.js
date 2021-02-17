@@ -5,7 +5,7 @@ import Input from "../components/toolbox/Input";
 import { loginHandler } from "../redux/authActions";
 import { useApiProgress } from "../shared/ApiProgress";
 
-const LoginPage = (props) => {
+const AdminLoginPage = (props) => {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [error, setError] = useState();
@@ -43,7 +43,7 @@ const LoginPage = (props) => {
   return (
     <div className="container w-25 mt-5">
       <form>
-        <h1 className="text-center mt-5 mb-4">Login</h1>
+        <h1 className="text-center mt-5 mb-4">Admin Login</h1>
         <Input
           label={"Username"}
           onChange={(event) => {
@@ -71,4 +71,4 @@ const LoginPage = (props) => {
   );
 };
 
-export default LoginPage;
+export default AdminLoginPage;

@@ -9,6 +9,7 @@ import Navbar from "../components/shared/Navbar";
 import AddNotePage from "../pages/AddNotePage";
 import NoteDetailPage from "../pages/NoteDetailPage";
 import UserProfilePage from "../pages/UserProfilePage";
+import AdminLoginPage from "../pages/AdminLoginPage";
 
 function App() {
   const { isLoggedIn } = useSelector((store) => ({
@@ -22,6 +23,7 @@ function App() {
         {isLoggedIn && <Route exact path="/" component={UserPage} />}
         {!isLoggedIn && <Route path="/signup" component={UserSignupPage} />}
         {!isLoggedIn && <Route path="/login" component={LoginPage} />}
+        {!isLoggedIn && <Route path="/admin" component={AdminLoginPage} />}
         {isLoggedIn && <Route path="/addNote" component={AddNotePage} />}
         {isLoggedIn && <Route exact path="/user" component={UserProfilePage} />}
         {isLoggedIn && (
