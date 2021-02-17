@@ -26,7 +26,7 @@ public class CommentService {
     }
 
     public void save(Comment comment, long noteId, User user) {
-        Note note = noteService.getNoteByNoteId(noteId);
+        Note note = noteService.getNoteByNoteId(noteId, user);
         if(note == null) {
             throw new NotFoundException();
         }
@@ -42,16 +42,16 @@ public class CommentService {
         commentRepository.save(newComment);
     }
 
-    public Page<Comment> getCommentsOfNote(long noteId, Pageable page) {
-        Note inDB = noteService.getNoteByNoteId(noteId);
+    public Page<Comment> getCommentsOfNote(long noteId, Pageable page, User user) {
+        Note inDB = noteService.getNoteByNoteId(noteId, user);
         return commentRepository.findByNote(inDB, page);
     }
 
-    public Page<Comment> getOldComments(long id, long noteId, Pageable page) {
+    public Page<Comment> getOldComments(long id, long noteId, Pageable page, User user) {
         Comment comment = commentRepository.getOne(id);
         Specification<Comment> specification = timestampLessThan(comment.getTimestamp());
 
-        Note inDB = noteService.getNoteByNoteId(noteId);
+        Note inDB = noteService.getNoteByNoteId(noteId, user);
         specification = specification.and(noteIs(inDB));
 
         return commentRepository.findAll(specification, page);

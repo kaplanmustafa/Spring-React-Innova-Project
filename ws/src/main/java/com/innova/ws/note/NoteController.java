@@ -42,15 +42,15 @@ public class NoteController {
     }
 
     @GetMapping("/users/notes/{id}")
-    NoteVM getNoteByNoteId(@PathVariable long id) {
-        Note note = noteService.getNoteByNoteId(id);
+    NoteVM getNoteByNoteId(@PathVariable long id, @CurrentUser User user) {
+        Note note = noteService.getNoteByNoteId(id, user);
         return new NoteVM(note);
     }
 
     @PutMapping("/notes/{username}/{noteId}")
     @PreAuthorize("#username == principal.username")
-    NoteVM updateNote(@RequestBody NoteUpdateVM updatedNote, @PathVariable String username, @PathVariable long noteId) {
-        Note note = noteService.updateNote(noteId, updatedNote);
+    NoteVM updateNote(@RequestBody NoteUpdateVM updatedNote, @PathVariable String username, @PathVariable long noteId, @CurrentUser User user) {
+        Note note = noteService.updateNote(noteId, updatedNote, user);
         return new NoteVM(note);
     }
 

@@ -1,5 +1,6 @@
 package com.innova.ws.note;
 
+import com.innova.ws.error.ForbiddenException;
 import com.innova.ws.note.vm.NoteUpdateVM;
 import com.innova.ws.user.User;
 import com.innova.ws.user.UserService;
@@ -31,8 +32,8 @@ public class NoteService {
         noteRepository.save(newNote);
     }
 
-    public Note updateNote(long noteId, NoteUpdateVM updatedNote) {
-        Note inDB = getNoteByNoteId(noteId);
+    public Note updateNote(long noteId, NoteUpdateVM updatedNote, User user) {
+        Note inDB = getNoteByNoteId(noteId, user);
         inDB.setContent(updatedNote.getContent());
         inDB.setTitle(updatedNote.getTitle());
         inDB.setTimestamp(new Date());
@@ -57,10 +58,20 @@ public class NoteService {
         return noteRepository.findAll(specification, page);
     }
 
-    public Note getNoteByNoteId(long id) {
+    public Note getNoteByNoteId(long id, User user) {
         Optional<Note> inDB = noteRepository.findById(id);
 
-        return inDB.orElse(null);
+        if(inDB.isPresent()) {
+            Note note = inDB.get();
+
+            if(note.getUser().getId() != user.getId()) {
+                throw new ForbiddenException();
+            }
+
+            return note;
+        }
+
+        return null;
     }
 
     public void delete(long id) {

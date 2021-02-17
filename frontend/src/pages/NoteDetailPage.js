@@ -35,7 +35,9 @@ const NoteDetailPage = (props) => {
       setNote(response.data);
       setUpdatedContent(response.data.content);
       setUpdatedTitle(response.data.title);
-    } catch (error) {}
+    } catch (error) {
+      history.push("/error");
+    }
   };
 
   const onClickSaveNote = async () => {
