@@ -35,6 +35,10 @@ public class AuthService {
             throw new AuthException();
         }
 
+        if(!credentials.getRole().equals(inDB.getRole().getName())) {
+            throw new AuthException();
+        }
+
         boolean matches = passwordEncoder.matches(credentials.getPassword(), inDB.getPassword());
 
         if(!matches) {

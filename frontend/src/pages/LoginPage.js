@@ -25,6 +25,7 @@ const LoginPage = (props) => {
     const creds = {
       username,
       password,
+      role: "user",
     };
 
     setError(undefined);

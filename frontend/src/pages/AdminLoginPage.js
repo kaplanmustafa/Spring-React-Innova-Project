@@ -25,6 +25,7 @@ const AdminLoginPage = (props) => {
     const creds = {
       username,
       password,
+      role: "admin",
     };
 
     setError(undefined);
