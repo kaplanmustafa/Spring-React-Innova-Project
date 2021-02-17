@@ -76,3 +76,7 @@ export const deleteComment = (id) => {
 export const deleteUser = (username) => {
   return axios.delete(`/api/1.0/users/${username}`);
 };
+
+export const getUsers = (page = 0, size = 5) => {
+  return axios.get(`/api/1.0/users?page=${page}&size=${size}`);
+};

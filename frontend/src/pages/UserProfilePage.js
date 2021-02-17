@@ -68,7 +68,7 @@ const UserProfilePage = (props) => {
     if (inEditMode) {
       setIsUpdateSucces(false);
     }
-  }, [inEditMode]);
+  }, [inEditMode, fullName, username]);
 
   const onClickDeleteUser = async () => {
     await deleteUser(username);
