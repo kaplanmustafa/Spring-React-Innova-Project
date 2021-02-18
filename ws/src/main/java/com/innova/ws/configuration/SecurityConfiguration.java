@@ -39,7 +39,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .antMatchers(HttpMethod.GET, "/api/1.0/users/{noteId}/comments/{id:[0-9]+}").authenticated()
                 .antMatchers(HttpMethod.DELETE, "/api/1.0/comments/{id:[0-9]+}").authenticated()
                 .antMatchers(HttpMethod.PUT, "/api/1.0/comments/{username}/{commentId}").authenticated()
-
                 .and()
                 .authorizeRequests().anyRequest().permitAll();
 

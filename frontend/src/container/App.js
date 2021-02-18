@@ -28,6 +28,7 @@ function App() {
         {isLoggedIn && role === "admin" && (
           <Route exact path="/" component={AdminPage} />
         )}
+        {!isLoggedIn && <Route exact path="/" component={LoginPage} />}
         {!isLoggedIn && <Route path="/signup" component={UserSignupPage} />}
         {!isLoggedIn && <Route path="/login" component={LoginPage} />}
         {!isLoggedIn && <Route path="/admin" component={AdminLoginPage} />}
