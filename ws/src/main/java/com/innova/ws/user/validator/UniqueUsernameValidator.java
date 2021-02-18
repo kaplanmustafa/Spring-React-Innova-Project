@@ -17,10 +17,13 @@ public class UniqueUsernameValidator implements ConstraintValidator<UniqueUserna
     public boolean isValid(String username, ConstraintValidatorContext context) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         String currentPrincipalName = authentication.getName();
 
-        if(username.equals(currentPrincipalName)) {
-            return true;
+        if(username != null) {
+            if(username.equals(currentPrincipalName)) {
+                return true;
+            }
         }
 
         User user = userRepository.findByUsername(username);

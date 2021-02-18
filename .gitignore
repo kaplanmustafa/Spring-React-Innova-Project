@@ -1,2 +1,4 @@
 ws/devdb.mv.db
 ws/devdb.trace.db
+ssh/private-key.ppk
+ssh/public-key
