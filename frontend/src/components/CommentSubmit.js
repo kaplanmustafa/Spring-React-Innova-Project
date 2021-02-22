@@ -38,6 +38,8 @@ const CommentSubmit = (props) => {
 
   let textAreaClass = "form-control";
 
+  const buttonEnabled = comment;
+
   return (
     <div className="container mt-3 mb-2">
       <div className="card p-1 flex-row col-10">
@@ -57,7 +59,7 @@ const CommentSubmit = (props) => {
                   className="btn btn-primary"
                   onClick={onClickComment}
                   text="Comment"
-                  disabled={pendingApiCall}
+                  disabled={pendingApiCall || !buttonEnabled}
                   pendingApiCall={pendingApiCall}
                 />
                 <button
