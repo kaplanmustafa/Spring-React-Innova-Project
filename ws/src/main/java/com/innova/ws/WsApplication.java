@@ -16,6 +16,22 @@ public class WsApplication {
 	}
 
 	@Bean
+	@Profile("prod")
+	CommandLineRunner createInitialAdmin(UserService userService) {
+		return(args) -> {
+			try {
+				userService.getByUsername("admin");
+			} catch (Exception e) {
+				User user = new User();
+				user.setUsername("admin");
+				user.setFullName("ADMIN");
+				user.setPassword("P4ssword");
+				userService.save(user, "admin");
+			}
+		};
+	}
+
+	@Bean
 	@Profile("dev")
 	CommandLineRunner createInitialUsers(UserService userService) {
 		return(args) -> {
