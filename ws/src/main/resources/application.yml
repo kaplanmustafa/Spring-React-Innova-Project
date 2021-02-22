@@ -8,6 +8,12 @@ spring:
   profiles:
     active:
       - dev
+  liquibase:
+    change-log: classpath:/db/changelog/changelog-master.xml
+    database-change-log-lock-table: false
+logging:
+  level:
+    liquibase: info
 ---
   profiles: prod
 ---
