@@ -30,11 +30,13 @@ public class NoteController {
     }
 
     @GetMapping("/users/{username}/notes")
+    @PreAuthorize("#username == principal.username")
     Page<NoteVM> getUserNotes(@PathVariable String username, @PageableDefault(sort = "timestamp", direction = Direction.DESC) Pageable page) {
         return noteService.getNotesOfUser(username, page).map(NoteVM::new);
     }
 
     @GetMapping( "/users/{username}/notes/{id:[0-9]+}")
+    @PreAuthorize("#username == principal.username")
     ResponseEntity<?> getNotesRelative(@PageableDefault(sort = "timestamp", direction = Direction.DESC) Pageable page, @PathVariable long id,
                                         @PathVariable String username) {
 
