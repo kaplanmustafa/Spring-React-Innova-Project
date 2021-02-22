@@ -22,7 +22,7 @@ public class UserController {
 
     @PostMapping("/users")
     public GenericResponse createUser(@Valid @RequestBody User user) {
-        userService.save(user);
+        userService.save(user, "user");
         return new GenericResponse("User created");
     }
 

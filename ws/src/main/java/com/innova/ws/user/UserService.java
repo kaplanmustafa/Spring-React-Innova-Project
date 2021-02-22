@@ -23,11 +23,11 @@ public class UserService {
         this.roleService = roleService;
     }
 
-    public void save(User user) {
+    public void save(User user, String roleName) {
         user.setPassword(this.passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
 
-        roleService.saveUserRole(user, "user");
+        roleService.saveUserRole(user, roleName);
     }
 
     public User getByUsername(String username) {
