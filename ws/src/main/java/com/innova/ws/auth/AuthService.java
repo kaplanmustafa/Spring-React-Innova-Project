@@ -1,31 +1,33 @@
 package com.innova.ws.auth;
 
+import com.innova.ws.configuration.CustomUserDetailsService;
+import com.innova.ws.jwt.JwtUtil;
 import com.innova.ws.user.User;
 import com.innova.ws.user.UserRepository;
 import com.innova.ws.user.vm.UserVM;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import org.hibernate.proxy.HibernateProxy;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
 
 @Service
 public class AuthService {
 
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
+    JwtUtil jwtUtil;
+    AuthenticationManager authenticationManager;
+    CustomUserDetailsService userDetailsService;
 
-    String key = "my-app-secret";
-
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil, AuthenticationManager authenticationManager,
+                       CustomUserDetailsService userDetailsService) {
         super();
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
+        this.authenticationManager = authenticationManager;
+        this.userDetailsService = userDetailsService;
     }
 
     public AuthResponse authenticate(Credentials credentials) {
@@ -45,29 +47,20 @@ public class AuthService {
             throw new AuthException();
         }
 
-        UserVM userVM = new UserVM(inDB);
-        String token = Jwts.builder().setSubject("" + inDB.getId()).signWith(SignatureAlgorithm.HS512, key).compact();
-        AuthResponse response = new AuthResponse();
-        response.setUser(userVM);
-        response.setToken(token);
-        response.setRole(inDB.getRole().getName());
-        return response;
-    }
-
-    @Transactional
-    public UserDetails getUserDetails(String token) {
-        JwtParser parser = Jwts.parser().setSigningKey(key);
-
         try {
-            parser.parse(token);
-            Claims claims = parser.parseClaimsJws(token).getBody();
-            long userId = Long.parseLong(claims.getSubject());
-            User user = userRepository.getOne(userId);
-            return (User) ((HibernateProxy) user).getHibernateLazyInitializer().getImplementation();
-        } catch (Exception e) {
-            e.printStackTrace();
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(credentials.getUsername(), credentials.getPassword()));
+        } catch (Exception ex) {
+            throw new AuthException();
         }
 
-        return null;
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(credentials.getUsername());
+        final String jwt = jwtUtil.generateToken(userDetails);
+
+        UserVM userVM = new UserVM(inDB);
+        AuthResponse response = new AuthResponse();
+        response.setUser(userVM);
+        response.setToken(jwt);
+        response.setRole(inDB.getRole().getName());
+        return response;
     }
 }
