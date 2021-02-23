@@ -57,9 +57,9 @@ public class JwtUtil {
                 .compact();
     }
 
-    // token hala geçerli mi? kullanıcı adı doğru ise ve token ın geçerlilik süresi devam ediyorsa true döner.
-    public Boolean validateToken(String token, UserDetails userDetails) {
+    // token hala geçerli mi? token ın geçerlilik süresi devam ediyorsa true döner.
+    public Boolean validateToken(String token) {
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        return (!isTokenExpired(token));
     }
 }
