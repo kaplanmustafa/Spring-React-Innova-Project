@@ -1,6 +1,7 @@
 package com.innova.ws.comment;
 
 import com.innova.ws.comment.vm.CommentUpdateVM;
+import com.innova.ws.configuration.CustomUserDetails;
 import com.innova.ws.error.ForbiddenException;
 import com.innova.ws.error.NotFoundException;
 import com.innova.ws.note.Note;
@@ -25,13 +26,13 @@ public class CommentService {
         this.noteService = noteService;
     }
 
-    public void save(Comment comment, long noteId, User user) {
+    public void save(Comment comment, long noteId, CustomUserDetails user) {
         Note note = noteService.getNoteByNoteId(noteId, user);
         if(note == null) {
             throw new NotFoundException();
         }
 
-        if(note.getUser().getId() != user.getId()) {
+        if(note.getUser().getId() != user.getUser().getId()) {
             throw new ForbiddenException();
         }
 
@@ -42,12 +43,12 @@ public class CommentService {
         commentRepository.save(newComment);
     }
 
-    public Page<Comment> getCommentsOfNote(long noteId, Pageable page, User user) {
+    public Page<Comment> getCommentsOfNote(long noteId, Pageable page, CustomUserDetails user) {
         Note inDB = noteService.getNoteByNoteId(noteId, user);
         return commentRepository.findByNote(inDB, page);
     }
 
-    public Page<Comment> getOldComments(long id, long noteId, Pageable page, User user) {
+    public Page<Comment> getOldComments(long id, long noteId, Pageable page, CustomUserDetails user) {
         Comment comment = commentRepository.getOne(id);
         Specification<Comment> specification = timestampLessThan(comment.getTimestamp());
 

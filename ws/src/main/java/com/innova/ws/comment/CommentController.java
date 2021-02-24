@@ -2,9 +2,9 @@ package com.innova.ws.comment;
 
 import com.innova.ws.comment.vm.CommentUpdateVM;
 import com.innova.ws.comment.vm.CommentVM;
+import com.innova.ws.configuration.CustomUserDetails;
 import com.innova.ws.shared.CurrentUser;
 import com.innova.ws.shared.GenericResponse;
-import com.innova.ws.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,20 +24,20 @@ public class CommentController {
     CommentService commentService;
 
     @PostMapping("/comments/{noteId}")
-    GenericResponse saveComment(@Valid @RequestBody Comment comment, @PathVariable long noteId, @CurrentUser User user) {
+    GenericResponse saveComment(@Valid @RequestBody Comment comment, @PathVariable long noteId, @CurrentUser CustomUserDetails user) {
         commentService.save(comment, noteId, user);
         return new GenericResponse("Comment saved");
     }
 
     @GetMapping("/users/comments/{noteId}")
     Page<CommentVM> getCommentsOfNote(@PathVariable long noteId, @PageableDefault(sort = "timestamp", direction = Sort.Direction.DESC) Pageable page,
-                                      @CurrentUser User user) {
+                                      @CurrentUser CustomUserDetails user) {
         return commentService.getCommentsOfNote(noteId, page, user).map(CommentVM::new);
     }
 
     @GetMapping({ "/users/{noteId}/comments/{id:[0-9]+}"})
     ResponseEntity<?> getCommentsRelative(@PageableDefault(sort = "timestamp", direction = Sort.Direction.DESC) Pageable page, @PathVariable long id,
-                                       @PathVariable long noteId, @CurrentUser User user) {
+                                       @PathVariable long noteId, @CurrentUser CustomUserDetails user) {
 
         return ResponseEntity.ok(commentService.getOldComments(id, noteId, page, user).map(CommentVM::new));
     }

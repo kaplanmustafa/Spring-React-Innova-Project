@@ -1,6 +1,6 @@
 package com.innova.ws.note;
 
-import com.innova.ws.user.User;
+import com.innova.ws.configuration.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ public class NoteSecurityService {
     @Autowired
     NoteRepository noteRepository;
 
-    public boolean isAllowedToDelete(long id, User loggedInUser) {
+    public boolean isAllowedToDelete(long id, CustomUserDetails loggedInUser) {
         Optional<Note> optionalNote = noteRepository.findById(id);
 
         if(!optionalNote.isPresent()) {
@@ -21,7 +21,7 @@ public class NoteSecurityService {
 
         Note note = optionalNote.get();
 
-        return note.getUser().getId() == loggedInUser.getId();
+        return note.getUser().getId() == loggedInUser.getUser().getId();
     }
 
 }

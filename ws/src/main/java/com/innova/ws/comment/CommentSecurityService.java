@@ -1,6 +1,6 @@
 package com.innova.ws.comment;
 
-import com.innova.ws.user.User;
+import com.innova.ws.configuration.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ public class CommentSecurityService {
     @Autowired
     CommentRepository commentRepository;
 
-    public boolean isAllowedToDelete(long id, User loggedInUser) {
+    public boolean isAllowedToDelete(long id, CustomUserDetails loggedInUser) {
         Optional<Comment> optionalComment = commentRepository.findById(id);
 
         if(!optionalComment.isPresent()) {
@@ -21,7 +21,7 @@ public class CommentSecurityService {
 
         Comment comment = optionalComment.get();
 
-        return comment.getNote().getUser().getId() == loggedInUser.getId();
+        return comment.getNote().getUser().getId() == loggedInUser.getUser().getId();
     }
 
 }

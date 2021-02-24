@@ -1,10 +1,10 @@
 package com.innova.ws.note;
 
+import com.innova.ws.configuration.CustomUserDetails;
 import com.innova.ws.note.vm.NoteUpdateVM;
 import com.innova.ws.note.vm.NoteVM;
 import com.innova.ws.shared.CurrentUser;
 import com.innova.ws.shared.GenericResponse;
-import com.innova.ws.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +24,7 @@ public class NoteController {
     NoteService noteService;
 
     @PostMapping("/notes")
-    GenericResponse saveNote(@Valid @RequestBody Note note, @CurrentUser User user) {
+    GenericResponse saveNote(@Valid @RequestBody Note note, @CurrentUser CustomUserDetails user) {
         noteService.save(note, user);
         return new GenericResponse("Note saved");
     }
@@ -44,14 +44,14 @@ public class NoteController {
     }
 
     @GetMapping("/users/notes/{id}")
-    NoteVM getNoteByNoteId(@PathVariable long id, @CurrentUser User user) {
+    NoteVM getNoteByNoteId(@PathVariable long id, @CurrentUser CustomUserDetails user) {
         Note note = noteService.getNoteByNoteId(id, user);
         return new NoteVM(note);
     }
 
     @PutMapping("/notes/{username}/{noteId}")
     @PreAuthorize("#username == principal.username")
-    NoteVM updateNote(@RequestBody NoteUpdateVM updatedNote, @PathVariable String username, @PathVariable long noteId, @CurrentUser User user) {
+    NoteVM updateNote(@RequestBody NoteUpdateVM updatedNote, @PathVariable String username, @PathVariable long noteId, @CurrentUser CustomUserDetails user) {
         Note note = noteService.updateNote(noteId, updatedNote, user);
         return new NoteVM(note);
     }

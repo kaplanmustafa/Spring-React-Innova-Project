@@ -2,6 +2,7 @@ package com.innova.ws.configuration;
 
 import com.innova.ws.jwt.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -53,6 +54,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
     }
 
     @Autowired
+    @Qualifier("userDetailsService")
     private CustomUserDetailsService userDetailsService;
 
     @Override
