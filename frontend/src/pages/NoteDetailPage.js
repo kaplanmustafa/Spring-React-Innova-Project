@@ -7,6 +7,7 @@ import ButtonWithProgress from "../components/toolbox/ButtonWithProgress";
 import { useApiProgress } from "../shared/ApiProgress";
 import Modal from "../components/toolbox/Modal";
 import Comments from "../components/Comments";
+import Spinner from "../components/toolbox/Spinner";
 
 const NoteDetailPage = (props) => {
   const [inEditMode, setInEditMode] = useState(false);
@@ -80,6 +81,10 @@ const NoteDetailPage = (props) => {
     `/api/1.0/notes/${username}/${noteId}`
   );
   const buttonEnabled = content !== updatedContent || title !== updatedTitle;
+
+  if (content === undefined) {
+    return <Spinner />;
+  }
 
   return (
     <div className="container">
