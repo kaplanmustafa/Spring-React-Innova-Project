@@ -33,6 +33,7 @@ public class User implements UserDetails{
     private String fullName;
 
     @NotNull
+    @Size(min = 8, max= 255)
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$", message = "{ws.constraints.password.Pattern.message}")
     private String password;
 
