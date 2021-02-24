@@ -44,7 +44,7 @@ public class User implements UserDetails{
     private Role role;
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.createAuthorityList("Role_User");
+        return AuthorityUtils.createAuthorityList("Role_" + role.getName());
     }
 
     public boolean isAccountNonExpired() {

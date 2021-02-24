@@ -1,6 +1,5 @@
 package com.innova.ws.user;
 
-import com.innova.ws.error.ForbiddenException;
 import com.innova.ws.error.NotFoundException;
 import com.innova.ws.role.RoleService;
 import com.innova.ws.user.vm.PasswordUpdateVM;
@@ -54,10 +53,7 @@ public class UserService {
         userRepository.save(inDB);
     }
 
-    public Page<User> getUsers(Pageable page, User user) {
-        if(!user.getRole().getName().equals("admin")) {
-            throw  new ForbiddenException();
-        }
+    public Page<User> getUsers(Pageable page) {
 
         return userRepository.findByRoleName("user", page);
     }

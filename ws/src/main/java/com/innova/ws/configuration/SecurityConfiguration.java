@@ -32,7 +32,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .antMatchers(HttpMethod.GET, "/api/1.0/users/{username}/notes").authenticated()
                 .antMatchers(HttpMethod.PUT, "/api/1.0/users/{username}").authenticated()
                 .antMatchers(HttpMethod.PUT, "/api/1.0/users/password/{username}").authenticated()
-                .antMatchers(HttpMethod.GET, "/api/1.0/users").authenticated()
+                .antMatchers(HttpMethod.GET, "/api/1.0/users").hasAuthority("Role_admin")
                 .antMatchers(HttpMethod.DELETE, "/api/1.0/users/{username}").authenticated()
                 .antMatchers(HttpMethod.POST, "/api/1.0/notes").authenticated()
                 .antMatchers(HttpMethod.GET, "/api/1.0/users/{username}/notes").authenticated()

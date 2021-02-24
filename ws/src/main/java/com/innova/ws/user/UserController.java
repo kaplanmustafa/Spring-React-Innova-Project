@@ -1,6 +1,5 @@
 package com.innova.ws.user;
 
-import com.innova.ws.shared.CurrentUser;
 import com.innova.ws.shared.GenericResponse;
 import com.innova.ws.user.vm.PasswordUpdateVM;
 import com.innova.ws.user.vm.UserUpdateVM;
@@ -41,8 +40,8 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    Page<UserVM> getUsers(Pageable page, @CurrentUser User user) {
-        return userService.getUsers(page, user).map(UserVM::new);
+    Page<UserVM> getUsers(Pageable page) {
+        return userService.getUsers(page).map(UserVM::new);
     }
 
     @DeleteMapping("/users/{username}")
