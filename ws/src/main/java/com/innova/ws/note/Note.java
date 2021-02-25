@@ -5,6 +5,8 @@ import com.innova.ws.user.User;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 
@@ -16,9 +18,11 @@ public class Note {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(length = 1000)
+    @NotNull(message = "{ws.constraints.note.NotNull.message}")
+    @Size(min = 1, max= 1000)
     private String content;
 
+    @Size(max= 255)
     private String title;
 
     @Temporal(TemporalType.TIMESTAMP)

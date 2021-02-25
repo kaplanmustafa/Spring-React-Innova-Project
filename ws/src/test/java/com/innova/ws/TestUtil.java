@@ -89,4 +89,14 @@ public class TestUtil {
 
         return "{ \"username\": \"" + username + "\"  }";
     }
+
+    public static String createNote(String content, String title) {
+
+        return "{ \"content\": \"" + content + "\", \"title\": \"" + title + "\" }";
+    }
+
+    public static String createNoteWithoutContent(String title) {
+
+        return "{ \"title\": \"" + title + "\" }";
+    }
 }
