@@ -26,6 +26,10 @@ public class CurrentPasswordControlValidator implements ConstraintValidator<Curr
 
         User inDB = userRepository.findByUsername(currentPrincipalName);
 
-        return passwordEncoder.matches(currentPassword, inDB.getPassword());
+        if(currentPassword != null) {
+            return passwordEncoder.matches(currentPassword, inDB.getPassword());
+        }
+
+        return false;
     }
 }

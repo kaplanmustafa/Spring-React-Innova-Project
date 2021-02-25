@@ -26,7 +26,6 @@ public class UserController {
     }
 
     @PutMapping("/users/{username}")
-    @PreAuthorize("#username == principal.username") // pricipal --> loggedInUser
     UserVM updateUser(@Valid @RequestBody UserUpdateVM updatedUser, @PathVariable String username) {
         User user = userService.updateUser(username, updatedUser);
         return new UserVM(user);
