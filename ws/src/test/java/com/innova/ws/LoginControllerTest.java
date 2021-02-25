@@ -86,4 +86,13 @@ public class LoginControllerTest {
                 .perform(MockMvcRequestBuilders.post("/api/1.0/auth").content(TestUtil.createInValidAdminCreds()).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
     }
+
+    @Test
+    public void postLoginAdmin_withValidCredentials_receiveLoggedInRole() throws Exception{
+
+        mvc
+                .perform(MockMvcRequestBuilders.post("/api/1.0/auth").content(TestUtil.createValidAdminCreds()).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.role").value("admin"));
+    }
 }
