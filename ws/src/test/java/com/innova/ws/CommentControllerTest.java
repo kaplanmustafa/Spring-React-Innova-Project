@@ -162,11 +162,11 @@ public class CommentControllerTest {
         final UserDetails userDetails = userDetailsService.loadUserByUsername("user1");
 
         mvc
-                .perform(MockMvcRequestBuilders.put(API_1_0_COMMENTS + "user1/1")
-                        .header("Authorization", "Bearer " + jwtUtil.generateToken(userDetails))
-                        .content(TestUtil.createCommment("updated-comment"))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+            .perform(MockMvcRequestBuilders.put(API_1_0_COMMENTS + "user1/1")
+                    .header("Authorization", "Bearer " + jwtUtil.generateToken(userDetails))
+                    .content(TestUtil.createCommment("updated-comment"))
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound());
     }
 
     @Test
@@ -180,5 +180,38 @@ public class CommentControllerTest {
                     .content(TestUtil.createCommment("updated-comment"))
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void deleteComment_whenCommentIsOwnedByAnotherUser_receiveForbidden() throws Exception{
+
+        final UserDetails userDetails = userDetailsService.loadUserByUsername("user20");
+
+        mvc
+            .perform(MockMvcRequestBuilders.delete(API_1_0_COMMENTS + "419")
+                    .header("Authorization", "Bearer " + jwtUtil.generateToken(userDetails)))
+            .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void deleteComment_whenCommentNotExist_receiveForbidden() throws Exception{
+
+        final UserDetails userDetails = userDetailsService.loadUserByUsername("user20");
+
+        mvc
+            .perform(MockMvcRequestBuilders.delete(API_1_0_COMMENTS + "1")
+                    .header("Authorization", "Bearer " + jwtUtil.generateToken(userDetails)))
+            .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void deleteComment_whenUserIsAuthorized_receiveOk() throws Exception{
+
+        final UserDetails userDetails = userDetailsService.loadUserByUsername("user1");
+
+        mvc
+                .perform(MockMvcRequestBuilders.delete(API_1_0_COMMENTS + "419")
+                        .header("Authorization", "Bearer " + jwtUtil.generateToken(userDetails)))
+                .andExpect(status().isOk());
     }
 }

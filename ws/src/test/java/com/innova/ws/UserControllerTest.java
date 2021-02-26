@@ -489,4 +489,37 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    public void deleteUser_whenAuthorizedUserSendsRequestForAnotherUser_receiveForbidden() throws Exception{
+
+        final UserDetails userDetails = userDetailsService.loadUserByUsername("user1");
+
+        mvc
+                .perform(MockMvcRequestBuilders.delete(API_1_0_USERS + "/user2")
+                        .header("Authorization", "Bearer " + jwtUtil.generateToken(userDetails)))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void deleteUser_whenUserNotExist_receiveForbidden() throws Exception{
+
+        final UserDetails userDetails = userDetailsService.loadUserByUsername("user1");
+
+        mvc
+                .perform(MockMvcRequestBuilders.delete(API_1_0_USERS + "/fake-username")
+                        .header("Authorization", "Bearer " + jwtUtil.generateToken(userDetails)))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void deleteUser_whenUserIsAuthorized_receiveOk() throws Exception{
+
+        final UserDetails userDetails = userDetailsService.loadUserByUsername("user25");
+
+        mvc
+                .perform(MockMvcRequestBuilders.delete(API_1_0_USERS + "/user25")
+                        .header("Authorization", "Bearer " + jwtUtil.generateToken(userDetails)))
+                .andExpect(status().isOk());
+    }
 }
