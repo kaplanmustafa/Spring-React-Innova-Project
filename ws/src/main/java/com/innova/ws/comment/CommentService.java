@@ -6,7 +6,6 @@ import com.innova.ws.error.ForbiddenException;
 import com.innova.ws.error.NotFoundException;
 import com.innova.ws.note.Note;
 import com.innova.ws.note.NoteService;
-import com.innova.ws.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -70,6 +69,11 @@ public class CommentService {
 
     public Comment updateComment(long commentId, CommentUpdateVM updatedComment) {
         Comment inDB = getCommentByCommentId(commentId);
+
+        if(inDB == null) {
+            throw new NotFoundException();
+        }
+
         inDB.setComment(updatedComment.getComment());
         inDB.setTimestamp(new Date());
 

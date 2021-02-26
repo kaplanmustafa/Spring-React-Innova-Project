@@ -99,4 +99,9 @@ public class TestUtil {
 
         return "{ \"title\": \"" + title + "\" }";
     }
+
+    public static String createCommment(String comment) {
+
+        return "{ \"comment\": \"" + comment + "\" }";
+    }
 }

@@ -10,7 +10,7 @@ spring:
       - dev
   liquibase:
     change-log: classpath:/db/changelog/changelog-master.xml
-    database-change-log-lock-table: false
+    database-change-log-lock-table: 0
 logging:
   level:
     liquibase: info
