@@ -14,6 +14,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -23,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class NoteControllerTest {
 
     private static final String API_1_0_NOTES = "/api/1.0/notes";
+    private static final String API_1_0_USERS = "/api/1.0/users/";
 
     @Autowired
     private MockMvc mvc;
@@ -70,5 +75,125 @@ public class NoteControllerTest {
                     .content(TestUtil.createNote("", "test-title"))
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void postNote_whenNoteHasContentExceedsTheLengthLimit_receiveBadRequest() throws Exception{
+
+        final UserDetails userDetails = userDetailsService.loadUserByUsername("user1");
+        String valueOf256Chars = IntStream.rangeClosed(1,1001).mapToObj(x -> "a").collect(Collectors.joining());
+
+        mvc
+            .perform(MockMvcRequestBuilders.post(API_1_0_NOTES)
+                    .header("Authorization", "Bearer " + jwtUtil.generateToken(userDetails))
+                    .content(TestUtil.createNote(valueOf256Chars, "test-title"))
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void postNote_whenNoteHasTitleTheLengthLimit_receiveBadRequest() throws Exception{
+
+        final UserDetails userDetails = userDetailsService.loadUserByUsername("user1");
+        String valueOf256Chars = IntStream.rangeClosed(1,256).mapToObj(x -> "a").collect(Collectors.joining());
+
+        mvc
+            .perform(MockMvcRequestBuilders.post(API_1_0_NOTES)
+                    .header("Authorization", "Bearer " + jwtUtil.generateToken(userDetails))
+                    .content(TestUtil.createNote("test-content", valueOf256Chars))
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void postNote_whenUnauthorizedUserSendsTheRequest_receiveUnauthorized() throws Exception{
+
+        mvc
+            .perform(MockMvcRequestBuilders.post(API_1_0_NOTES)
+                    .content(TestUtil.createNote("test-content", "test-title"))
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void getNotesOfUser_whenThereAreNoNotes_receivePageWithZeroItems() throws Exception {
+
+        final UserDetails userDetails = userDetailsService.loadUserByUsername("user5");
+
+        mvc
+            .perform(MockMvcRequestBuilders.get(API_1_0_USERS + "user5/notes")
+                    .header("Authorization", "Bearer " + jwtUtil.generateToken(userDetails)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.empty").value("true"));
+    }
+
+    @Test
+    public void getNotesOfUser_whenThereAreNotes_receivePageWithItems() throws Exception {
+
+        final UserDetails userDetails = userDetailsService.loadUserByUsername("user1");
+
+        mvc
+            .perform(MockMvcRequestBuilders.get(API_1_0_USERS + "user1/notes")
+                    .header("Authorization", "Bearer " + jwtUtil.generateToken(userDetails)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.empty").value("false"));
+    }
+
+    @Test
+    public void getNotesOfUser_whenAuthorizedUserSendsRequestForAnotherUser_receiveForbidden() throws Exception {
+
+        final UserDetails userDetails = userDetailsService.loadUserByUsername("user2");
+
+        mvc
+            .perform(MockMvcRequestBuilders.get(API_1_0_USERS + "user1/notes")
+                    .header("Authorization", "Bearer " + jwtUtil.generateToken(userDetails)))
+            .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void getNotesOfUser_whenUnauthorizedUserSendsRequest_receiveUnauthorized() throws Exception {
+
+        mvc
+            .perform(MockMvcRequestBuilders.get(API_1_0_USERS + "user1/notes"))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void putNote_whenValidRequestBodyFromAuthorizedUser_receiveOk() throws Exception{
+
+        final UserDetails userDetails = userDetailsService.loadUserByUsername("user1");
+
+        mvc
+            .perform(MockMvcRequestBuilders.put(API_1_0_NOTES + "/user1/389")
+                    .header("Authorization", "Bearer " + jwtUtil.generateToken(userDetails))
+                    .content(TestUtil.createNote("updated-content", "updated-title"))
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    public void putNote_whenIncorrectNoteIdFromAuthorizedUser_receiveNotFound() throws Exception{
+
+        final UserDetails userDetails = userDetailsService.loadUserByUsername("user1");
+
+        mvc
+                .perform(MockMvcRequestBuilders.put(API_1_0_NOTES + "/user1/1")
+                        .header("Authorization", "Bearer " + jwtUtil.generateToken(userDetails))
+                        .content(TestUtil.createNote("updated-content", "updated-title"))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void putNote_whenAuthorizedUserSendsUpdateForAnotherUser_receiveForbidden() throws Exception{
+
+        final UserDetails userDetails = userDetailsService.loadUserByUsername("user2");
+
+        mvc
+            .perform(MockMvcRequestBuilders.put(API_1_0_NOTES + "/user1/389")
+                    .header("Authorization", "Bearer " + jwtUtil.generateToken(userDetails))
+                    .content(TestUtil.createNote("updated-content", "updated-title"))
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isForbidden());
     }
 }

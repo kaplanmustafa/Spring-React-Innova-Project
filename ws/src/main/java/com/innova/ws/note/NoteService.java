@@ -2,6 +2,7 @@ package com.innova.ws.note;
 
 import com.innova.ws.configuration.CustomUserDetails;
 import com.innova.ws.error.ForbiddenException;
+import com.innova.ws.error.NotFoundException;
 import com.innova.ws.note.vm.NoteUpdateVM;
 import com.innova.ws.user.User;
 import com.innova.ws.user.UserService;
@@ -35,6 +36,11 @@ public class NoteService {
 
     public Note updateNote(long noteId, NoteUpdateVM updatedNote, CustomUserDetails user) {
         Note inDB = getNoteByNoteId(noteId, user);
+
+        if(inDB == null) {
+            throw new NotFoundException();
+        }
+
         inDB.setContent(updatedNote.getContent());
         inDB.setTitle(updatedNote.getTitle());
         inDB.setTimestamp(new Date());
