@@ -37,7 +37,7 @@ public class NoteService {
     public Note updateNote(long noteId, NoteUpdateVM updatedNote, CustomUserDetails user) {
         Note inDB = getNoteByNoteId(noteId, user);
 
-        if(inDB == null) {
+        if (inDB == null) {
             throw new NotFoundException();
         }
 
@@ -57,7 +57,7 @@ public class NoteService {
         Note note = noteRepository.getOne(id);
         Specification<Note> specification = timestampLessThan(note.getTimestamp());
 
-        if(username != null) {
+        if (username != null) {
             User inDB = userService.getByUsername(username);
             specification = specification.and(userIs(inDB));
         }
@@ -68,10 +68,10 @@ public class NoteService {
     public Note getNoteByNoteId(long id, CustomUserDetails user) {
         Optional<Note> inDB = noteRepository.findById(id);
 
-        if(inDB.isPresent()) {
+        if (inDB.isPresent()) {
             Note note = inDB.get();
 
-            if(note.getUser().getId() != user.getUser().getId()) {
+            if (note.getUser().getId() != user.getUser().getId()) {
                 throw new ForbiddenException();
             }
 

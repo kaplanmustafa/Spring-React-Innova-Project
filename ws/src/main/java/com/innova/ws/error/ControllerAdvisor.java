@@ -19,7 +19,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers,
-            HttpStatus status, WebRequest request) {
+                                                                  HttpStatus status, WebRequest request) {
 
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("message", status.getReasonPhrase());
@@ -30,9 +30,9 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         Map<String, String> errors = new HashMap<>();
 
         ex
-            .getBindingResult()
-            .getFieldErrors()
-            .forEach(x -> errors.put(x.getField(), x.getDefaultMessage()));
+                .getBindingResult()
+                .getFieldErrors()
+                .forEach(x -> errors.put(x.getField(), x.getDefaultMessage()));
 
         body.put("validationErrors", errors);
 

@@ -15,7 +15,7 @@ public class NoteSecurityService {
     public boolean isAllowedToDelete(long id, CustomUserDetails loggedInUser) {
         Optional<Note> optionalNote = noteRepository.findById(id);
 
-        if(!optionalNote.isPresent()) {
+        if (!optionalNote.isPresent()) {
             return false;
         }
 

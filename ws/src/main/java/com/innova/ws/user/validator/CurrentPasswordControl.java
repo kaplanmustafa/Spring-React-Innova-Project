@@ -8,11 +8,13 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Target({ FIELD })
+@Target({FIELD})
 @Retention(RUNTIME)
-@Constraint(validatedBy = { CurrentPasswordControlValidator.class })
+@Constraint(validatedBy = {CurrentPasswordControlValidator.class})
 public @interface CurrentPasswordControl {
     String message() default "{ws.constraints.password.Control.message}";
-    Class<?>[] groups() default { };
-    Class<? extends Payload>[] payload() default { };
+
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
 }

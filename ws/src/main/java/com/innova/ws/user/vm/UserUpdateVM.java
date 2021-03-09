@@ -10,11 +10,11 @@ import javax.validation.constraints.Size;
 public class UserUpdateVM {
 
     @NotNull(message = "{ws.constraints.username.NotNull.message}")
-    @Size(min = 4, max= 255)
+    @Size(min = 4, max = 255)
     @UniqueUsername
     private String username;
 
     @NotNull
-    @Size(min = 2, max= 255)
+    @Size(min = 2, max = 255)
     private String fullName;
 }

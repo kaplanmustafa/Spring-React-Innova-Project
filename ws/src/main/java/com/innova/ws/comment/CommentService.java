@@ -27,11 +27,11 @@ public class CommentService {
 
     public void save(Comment comment, long noteId, CustomUserDetails user) {
         Note note = noteService.getNoteByNoteId(noteId, user);
-        if(note == null) {
+        if (note == null) {
             throw new NotFoundException();
         }
 
-        if(note.getUser().getId() != user.getUser().getId()) {
+        if (note.getUser().getId() != user.getUser().getId()) {
             throw new ForbiddenException();
         }
 
@@ -70,7 +70,7 @@ public class CommentService {
     public Comment updateComment(long commentId, CommentUpdateVM updatedComment) {
         Comment inDB = getCommentByCommentId(commentId);
 
-        if(inDB == null) {
+        if (inDB == null) {
             throw new NotFoundException();
         }
 

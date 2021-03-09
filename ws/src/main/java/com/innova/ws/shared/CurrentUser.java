@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Target({ ElementType.PARAMETER })
+@Target({ElementType.PARAMETER})
 @Retention(RUNTIME)
 @AuthenticationPrincipal
 public @interface CurrentUser {

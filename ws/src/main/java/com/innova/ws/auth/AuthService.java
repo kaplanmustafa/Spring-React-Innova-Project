@@ -33,17 +33,17 @@ public class AuthService {
     public AuthResponse authenticate(Credentials credentials) {
         User inDB = userRepository.findByUsername(credentials.getUsername());
 
-        if(inDB == null) {
+        if (inDB == null) {
             throw new AuthException();
         }
 
-        if(!credentials.getRole().equals(inDB.getRole().getName())) {
+        if (!credentials.getRole().equals(inDB.getRole().getName())) {
             throw new AuthException();
         }
 
         boolean matches = passwordEncoder.matches(credentials.getPassword(), inDB.getPassword());
 
-        if(!matches) {
+        if (!matches) {
             throw new AuthException();
         }
 

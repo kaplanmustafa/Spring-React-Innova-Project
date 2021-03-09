@@ -19,7 +19,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    @Qualifier("userDetailsService")
+    private CustomUserDetailsService userDetailsService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -52,10 +56,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
         http.addFilterBefore(tokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
-
-    @Autowired
-    @Qualifier("userDetailsService")
-    private CustomUserDetailsService userDetailsService;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {

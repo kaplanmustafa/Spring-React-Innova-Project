@@ -9,9 +9,9 @@ import javax.validation.constraints.Size;
 public class NoteUpdateVM {
 
     @NotNull(message = "{ws.constraints.note.NotNull.message}")
-    @Size(min = 1, max= 1000)
+    @Size(min = 1, max = 1000)
     private String content;
 
-    @Size(max= 255)
+    @Size(max = 255)
     private String title;
 }

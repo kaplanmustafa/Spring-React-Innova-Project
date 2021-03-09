@@ -11,25 +11,25 @@ import org.springframework.context.annotation.Profile;
 @SpringBootApplication
 public class WsApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(WsApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(WsApplication.class, args);
+    }
 
-	@Bean
-	@Profile("dev")
-	CommandLineRunner createInitialUsers(UserService userService) {
-		return(args) -> {
-			try {
-				userService.getByUsername("user1");
-			} catch (Exception e) {
-				for(int i=1; i<=25; i++) {
-					User user = new User();
-					user.setUsername("user" + i);
-					user.setFullName("name" + i);
-					user.setPassword("P4ssword");
-					userService.save(user, "user");
-				}
-			}
-		};
-	}
+    @Bean
+    @Profile("dev")
+    CommandLineRunner createInitialUsers(UserService userService) {
+        return (args) -> {
+            try {
+                userService.getByUsername("user1");
+            } catch (Exception e) {
+                for (int i = 1; i <= 25; i++) {
+                    User user = new User();
+                    user.setUsername("user" + i);
+                    user.setFullName("name" + i);
+                    user.setPassword("P4ssword");
+                    userService.save(user, "user");
+                }
+            }
+        };
+    }
 }

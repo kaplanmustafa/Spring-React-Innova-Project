@@ -15,7 +15,7 @@ public class CommentSecurityService {
     public boolean isAllowedToDelete(long id, CustomUserDetails loggedInUser) {
         Optional<Comment> optionalComment = commentRepository.findById(id);
 
-        if(!optionalComment.isPresent()) {
+        if (!optionalComment.isPresent()) {
             return false;
         }
 

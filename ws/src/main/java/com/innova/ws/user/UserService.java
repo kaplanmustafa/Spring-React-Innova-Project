@@ -32,7 +32,7 @@ public class UserService {
     public User getByUsername(String username) {
         User inDB = userRepository.findByUsername(username);
 
-        if(inDB == null) {
+        if (inDB == null) {
             throw new NotFoundException();
         }
 

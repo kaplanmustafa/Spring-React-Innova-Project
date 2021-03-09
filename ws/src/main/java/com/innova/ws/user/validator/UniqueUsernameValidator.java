@@ -9,7 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class UniqueUsernameValidator implements ConstraintValidator<UniqueUsername, String>{
+public class UniqueUsernameValidator implements ConstraintValidator<UniqueUsername, String> {
 
     @Autowired
     UserRepository userRepository;
@@ -20,8 +20,8 @@ public class UniqueUsernameValidator implements ConstraintValidator<UniqueUserna
 
         String currentPrincipalName = authentication.getName();
 
-        if(username != null) {
-            if(username.equals(currentPrincipalName)) {
+        if (username != null) {
+            if (username.equals(currentPrincipalName)) {
                 return true;
             }
         }

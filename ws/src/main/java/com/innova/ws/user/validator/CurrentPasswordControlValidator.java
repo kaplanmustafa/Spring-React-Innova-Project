@@ -10,7 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class CurrentPasswordControlValidator implements ConstraintValidator<CurrentPasswordControl, String>{
+public class CurrentPasswordControlValidator implements ConstraintValidator<CurrentPasswordControl, String> {
 
     @Autowired
     UserRepository userRepository;
@@ -26,7 +26,7 @@ public class CurrentPasswordControlValidator implements ConstraintValidator<Curr
 
         User inDB = userRepository.findByUsername(currentPrincipalName);
 
-        if(currentPassword != null) {
+        if (currentPassword != null) {
             return passwordEncoder.matches(currentPassword, inDB.getPassword());
         }
 
